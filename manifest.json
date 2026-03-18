@@ -1,0 +1,24 @@
+{
+  "name": "SF6 Fight Note",
+  "short_name": "Fight Note",
+  "description": "SF6のキャラ対策・コンボ・立ち回りをメモするアプリ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0d14",
+  "theme_color": "#e8001e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

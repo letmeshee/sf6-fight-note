@@ -7,6 +7,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#e8001e" />
+  <link rel="apple-touch-icon" href="assets/icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Fight Note" />
   <style>
     /* ─── リセット & ベース ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,6 +30,15 @@
       --text-muted:#888;
       --radius:    12px;
       --transition:0.25s cubic-bezier(.4,0,.2,1);
+    }
+
+    body.light-theme {
+      --bg:        #f5f5f7;
+      --surface:   #ffffff;
+      --card:      #ffffff;
+      --border:    #e0e0e6;
+      --text:      #1c1c1e;
+      --text-muted:#8e8e93;
     }
 
     html, body {
@@ -46,6 +62,13 @@
       background: linear-gradient(135deg, #0d0d14 0%, #1a0010 100%);
       border-bottom: 2px solid var(--accent);
       flex-shrink: 0;
+      transition: background var(--transition);
+    }
+
+    body.light-theme .header,
+    body.light-theme .cm-header,
+    body.light-theme .detail-header {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f0f5 100%);
     }
 
     .header-back {
@@ -74,7 +97,45 @@
     }
 
     /* ─── キャラ一覧画面 ─── */
-    #screen-list .header-title { font-size: 26px; }
+    .header-logo {
+      height: 80px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #screen-list .header {
+      justify-content: center;
+      padding: 10px 0;
+      background: none;
+      border-bottom: none;
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all var(--transition);
+      z-index: 10;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      transform: translateY(-50%) scale(1.1);
+    }
 
     .list-subtitle {
       text-align: center;
@@ -175,7 +236,17 @@
       border: 1.5px solid var(--accent);
       flex-shrink: 0;
     }
-    .detail-char-info { flex: 1; }
+    body.light-theme .char-detail-portrait,
+    body.light-theme .cm-header-emoji,
+    body.light-theme .char-portrait {
+      background: linear-gradient(135deg, #eef2f5 0%, #ffffff 100%);
+    }
+    body.light-theme .char-portrait::after {
+      background: linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.5));
+    }
+    body.light-theme .char-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
     .detail-char-name {
       font-family: 'Rajdhani', sans-serif;
       font-size: 20px;
@@ -445,6 +516,27 @@
       color: var(--text-muted);
     }
 
+    /* ─── フィルターバー ─── */
+    .cm-filter-bar {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px 4px 16px;
+      background: var(--bg);
+    }
+    .cm-search-input, .cm-tag-filter {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .cm-search-input { flex: 1; }
+    .cm-search-input:focus, .cm-tag-filter:focus { border-color: var(--accent); }
+
     /* ─── メモカード一覧 ─── */
     .cm-cards {
       flex: 1;
@@ -517,6 +609,14 @@
     .cm-tag-sa2        { background: rgba(230,126,34,0.2); color: #eb984e; }
     .cm-tag-sa3        { background: rgba(231,76,60,0.2);  color: #ec7063; }
     .cm-tag-allin      { background: rgba(52,152,219,0.2); color: #5dade2; }
+    .cm-tag-position   { background: rgba(46,204,113,0.2); color: #5dde8f; }
+
+    /* 立ち回り用タグ色 */
+    .cm-tag-neu-all    { background: rgba(52,152,219,0.2); color: #5dade2; }
+    .cm-tag-neu-sit    { background: rgba(155,89,182,0.2); color: #d7bde2; }
+    .cm-tag-neu-growth { background: rgba(46,204,113,0.2); color: #5dde8f; }
+    .cm-tag-neu-test   { background: rgba(241,196,15,0.2); color: #f4d03f; }
+    .cm-tag-neu-pend   { background: rgba(149,165,166,0.2); color: #bdc3c7; }
 
     .cm-card-body {
       padding: 10px 14px 14px;
@@ -673,6 +773,13 @@
     .tag-option.selected[data-tag="sa2"]       { background: rgba(230,126,34,0.15); color: #eb984e; border-color: #eb984e; }
     .tag-option.selected[data-tag="sa3"]       { background: rgba(231,76,60,0.15);  color: #ec7063; border-color: #ec7063; }
     .tag-option.selected[data-tag="allin"]     { background: rgba(52,152,219,0.15); color: #5dade2; border-color: #5dade2; }
+    .tag-option.selected[data-tag="pos"]       { background: rgba(46,204,113,0.15); color: #5dde8f; border-color: #5dde8f; }
+
+    .tag-option.selected[data-tag="neu-all"]   { background: rgba(52,152,219,0.15); color: #5dade2; border-color: #5dade2; }
+    .tag-option.selected[data-tag="neu-sit"]   { background: rgba(155,89,182,0.15); color: #d7bde2; border-color: #d7bde2; }
+    .tag-option.selected[data-tag="neu-growth"]{ background: rgba(46,204,113,0.15); color: #5dde8f; border-color: #5dde8f; }
+    .tag-option.selected[data-tag="neu-test"]  { background: rgba(241,196,15,0.15); color: #f4d03f; border-color: #f4d03f; }
+    .tag-option.selected[data-tag="neu-pend"]  { background: rgba(149,165,166,0.15); color: #bdc3c7; border-color: #bdc3c7; }
 
     .tag-option .tag-check { font-size: 10px; }
 
@@ -885,10 +992,8 @@
 <!-- ════════════════════════════ キャラ一覧画面 ════════════════════════════ -->
 <div id="screen-list" class="screen active">
   <div class="header">
-    <div class="logo-wrap">
-      <span class="logo-badge">SF6</span>
-      <span class="header-title">キャラメモ帳</span>
-    </div>
+    <img src="assets/logo.png" alt="Fight Note" class="header-logo">
+    <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">🌙</div>
   </div>
   <div class="list-subtitle">キャラを選んでメモを記録しよう ⚡</div>
   <div class="search-wrap" style="margin-top:10px;">
@@ -931,6 +1036,12 @@
         </div>
       </div>
     </div>
+    <div class="cm-filter-bar">
+      <input type="text" class="cm-search-input" id="cm-search" placeholder="🔍 メモを検索..." oninput="updateFilteredCards()">
+      <select class="cm-tag-filter" id="cm-filter-tag" onchange="updateFilteredCards()">
+        <option value="">🏷️ すべてのタグ</option>
+      </select>
+    </div>
     <div class="cm-cards" id="cm-cards"></div>
     <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
   </div>
@@ -949,7 +1060,37 @@
         </div>
       </div>
     </div>
+    <div class="cm-filter-bar">
+      <input type="text" class="cm-search-input" id="combo-search" placeholder="🔍 メモを検索..." oninput="updateFilteredCards()">
+      <select class="cm-tag-filter" id="combo-filter-tag" onchange="updateFilteredCards()">
+        <option value="">🏷️ すべてのタグ</option>
+      </select>
+    </div>
     <div class="cm-cards" id="combo-cards"></div>
+    <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════ 立ち回り専用画面 ════════════════════════════ -->
+<div id="screen-neutral" class="screen">
+  <div class="cm-main">
+    <div class="cm-header">
+      <button class="header-back" onclick="goBackFromNeutral()">&#8592;</button>
+      <div class="cm-header-info">
+        <div class="cm-header-emoji" id="neutral-header-emoji"></div>
+        <div>
+          <div class="cm-header-name" id="neutral-header-name"></div>
+          <div class="cm-header-label">🎯 立ち回りメモ</div>
+        </div>
+      </div>
+    </div>
+    <div class="cm-filter-bar">
+      <input type="text" class="cm-search-input" id="neutral-search" placeholder="🔍 メモを検索..." oninput="updateFilteredCards()">
+      <select class="cm-tag-filter" id="neutral-filter-tag" onchange="updateFilteredCards()">
+        <option value="">🏷️ すべてのタグ</option>
+      </select>
+    </div>
+    <div class="cm-cards" id="neutral-cards"></div>
     <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
   </div>
 </div>
@@ -1008,6 +1149,33 @@
 </div>
 
 <script>
+// ─── サービスワーカー登録 ───
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+
+// ─── テーマ切り替え ───
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-theme');
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (toggleBtn) toggleBtn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('sf6memo_theme', isLight ? 'light' : 'dark');
+}
+
+function applySavedTheme() {
+  const saved = localStorage.getItem('sf6memo_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light-theme');
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (toggleBtn) toggleBtn.textContent = '☀️';
+  }
+}
+applySavedTheme();
+
 // ─── キャラクターデータ ───
 const CHARACTERS = [
   { id:'ryu',      name:'リュウ',       emoji:'🥋', origin:'日本' },
@@ -1018,7 +1186,7 @@ const CHARACTERS = [
   { id:'dhalsim',  name:'ダルシム',     emoji:'🔮', origin:'インド' },
   { id:'ehonda',   name:'E・本田',      emoji:'🎌', origin:'日本' },
   { id:'zangief',  name:'ザンギエフ',  emoji:'🐻', origin:'ロシア' },
-  { id:'cammy',    name:'キャミィ',     emoji:'🌿', origin:'イギリス' },
+  { id:'cammy',    name:'キャミィ',     emoji:'🐱', origin:'イギリス' },
   { id:'deejay',   name:'ディージェイ',emoji:'🎵', origin:'ジャマイカ' },
   { id:'luke',     name:'ルーク',       emoji:'🤜', origin:'アメリカ' },
   { id:'jamie',    name:'ジェイミー',   emoji:'🍶', origin:'中国' },
@@ -1027,7 +1195,7 @@ const CHARACTERS = [
   { id:'marisa',   name:'マリーザ',     emoji:'🏛️', origin:'イタリア' },
   { id:'lily',     name:'リリー',       emoji:'💨', origin:'アメリカ' },
   { id:'jp',       name:'JP',           emoji:'🦯', origin:'ロシア' },
-  { id:'juri',     name:'ジュリ',       emoji:'👢', origin:'韓国' },
+  { id:'juri',     name:'ジュリ',       emoji:'🕷️', origin:'韓国' },
   { id:'rashid',   name:'ラシード',     emoji:'🌪️', origin:'中東' },
   { id:'aki',      name:'A.K.I.',       emoji:'🐍', origin:'中国' },
   { id:'ed',       name:'エド',         emoji:'🥊', origin:'イギリス' },
@@ -1036,12 +1204,15 @@ const CHARACTERS = [
   { id:'terry',    name:'テリー',       emoji:'🧢', origin:'アメリカ' },
   { id:'mai',      name:'舞',           emoji:'🦋', origin:'日本' },
   { id:'elena',    name:'エレナ',       emoji:'🌍', origin:'ケニア' },
+  { id:'sagat',    name:'サガット',     emoji:'🐯', origin:'タイ' },
+  { id:'viper',    name:'C.ヴァイパー', emoji:'🕶️', origin:'アメリカ' },
+  { id:'alex',     name:'アレックス',   emoji:'💪', origin:'アメリカ' },
 ];
 
 const TABS = [
   { id:'countermeasure', label:'キャラ対策', icon:'🛡️',  isCm: true },
   { id:'combo',          label:'コンボ',     icon:'⚔️',  isCombo: true },
-  { id:'neutral',        label:'立ち回り',   icon:'🎯', placeholder:'立ち回りメモ…\n例：中距離では〇〇を軸に、飛びには〇〇で対空' },
+  { id:'neutral',        label:'立ち回り',   icon:'🎯',  isNeutral: true },
   { id:'other',          label:'その他',     icon:'📝',  placeholder:'その他のメモ…\n例：セットプレイ、起き攻め、注意点など' },
 ];
 
@@ -1057,6 +1228,13 @@ const TAG_LABELS = {
   sa2:         { label:'SA2',        cssClass:'cm-tag-sa2' },
   sa3:         { label:'SA3',        cssClass:'cm-tag-sa3' },
   allin:       { label:'オールイン',   cssClass:'cm-tag-allin' },
+  pos:         { label:'位置限定',     cssClass:'cm-tag-position' },
+  // 立ち回り用
+  'neu-all':    { label:'全体',        cssClass:'cm-tag-neu-all' },
+  'neu-sit':    { label:'場面',        cssClass:'cm-tag-neu-sit' },
+  'neu-growth': { label:'伸ばしどころ', cssClass:'cm-tag-neu-growth' },
+  'neu-test':   { label:'試し中',      cssClass:'cm-tag-neu-test' },
+  'neu-pend':   { label:'保留',        cssClass:'cm-tag-neu-pend' },
 };
 
 let currentChar = null;
@@ -1068,14 +1246,18 @@ let cmTargetChar = null;
 // Combo(コンボ)状態
 let comboMyChar = null;
 
+// Neutral(立ち回り)状態
+let neutralMyChar = null;
+
 // モーダル状態
-let currentMemoType = 'cm'; // 'cm' or 'combo'
+let currentMemoType = 'cm'; // 'cm', 'combo', 'neutral'
 let editingMemoIdx = -1;   // 編集中のメモインデックス(-1=新規)
 
 // ─── ユーティリティ ───
 function storageKey(charId, tabId) { return `sf6memo_${charId}_${tabId}`; }
 function cmStorageKey(myCharId, targetCharId) { return `sf6cm_${myCharId}_vs_${targetCharId}`; }
 function comboStorageKey(charId) { return `sf6combo_${charId}`; }
+function neutralStorageKey(charId) { return `sf6neutral_${charId}`; }
 
 function getCMMemos(myCharId, targetCharId) {
   const raw = localStorage.getItem(cmStorageKey(myCharId, targetCharId));
@@ -1093,14 +1275,24 @@ function setComboMemos(charId, memos) {
   localStorage.setItem(comboStorageKey(charId), JSON.stringify(memos));
 }
 
+function getNeutralMemos(charId) {
+  const raw = localStorage.getItem(neutralStorageKey(charId));
+  return raw ? JSON.parse(raw) : [];
+}
+function setNeutralMemos(charId, memos) {
+  localStorage.setItem(neutralStorageKey(charId), JSON.stringify(memos));
+}
+
 function hasMemo(charId) {
   // 通常タブのメモ
-  const normalMemo = TABS.filter(t => !t.isCm && !t.isCombo).some(t =>
+  const normalMemo = TABS.filter(t => !t.isCm && !t.isCombo && !t.isNeutral).some(t =>
     (localStorage.getItem(storageKey(charId, t.id)) || '').trim() !== ''
   );
   if (normalMemo) return true;
   // コンボメモ
   if (getComboMemos(charId).length > 0) return true;
+  // 立ち回りメモ
+  if (getNeutralMemos(charId).length > 0) return true;
   // キャラ対策のメモ
   return CHARACTERS.some(c => getCMMemos(charId, c.id).length > 0);
 }
@@ -1156,16 +1348,19 @@ function renderTabs(char) {
     section.className = 'tab-section';
     section.id = `tab-sec-${tab.id}`;
 
-    if (tab.isCm || tab.isCombo) {
-      // 専用画面へ遷移するボタン（キャラ対策 または コンボ）
+    if (tab.isCm || tab.isCombo || tab.isNeutral) {
+      // 専用画面へ遷移するボタン
       let count = 0;
       let action = '';
       if (tab.isCm) {
         count = CHARACTERS.reduce((sum, c) => sum + getCMMemos(char.id, c.id).length, 0);
         action = 'openCountermeasure()';
-      } else {
+      } else if (tab.isCombo) {
         count = getComboMemos(char.id).length;
         action = 'openCombo()';
+      } else {
+        count = getNeutralMemos(char.id).length;
+        action = 'openNeutral()';
       }
       section.innerHTML = `
         <div class="tab-header" onclick="${action}">
@@ -1177,11 +1372,11 @@ function renderTabs(char) {
       `;
     } else {
       const saved = localStorage.getItem(storageKey(char.id, tab.id)) || '';
+      section.className = 'tab-section open'; // 最初から開いた状態にする
       section.innerHTML = `
-        <div class="tab-header" onclick="toggleTab('${tab.id}')">
+        <div class="tab-header" style="cursor: default;">
           <span class="tab-icon">${tab.icon}</span>
           <span class="tab-label">${tab.label}</span>
-          <span class="tab-arrow">▼</span>
         </div>
         <div class="tab-content">
           <div class="tab-content-inner">
@@ -1227,6 +1422,7 @@ function openCountermeasure() {
   currentMemoType = 'cm';
   cmMyChar = currentChar;
   cmTargetChar = CHARACTERS[0]; // デフォルト: 最初のキャラ
+  initFilterOptions('cm');
   renderCMSidebar();
   selectCMTarget(cmTargetChar);
   switchScreen('screen-detail', 'screen-countermeasure');
@@ -1262,7 +1458,7 @@ function selectCMTarget(char) {
   document.querySelectorAll('.cm-sidebar-item').forEach((el, i) => {
     el.classList.toggle('active', CHARACTERS[i].id === char.id);
   });
-  renderCardList(document.getElementById('cm-cards'), getActiveMemos(), '🛡️');
+  updateFilteredCards();
 }
 
 // ═══════════════════════════════════════════════════
@@ -1274,7 +1470,8 @@ function openCombo() {
   document.getElementById('combo-header-emoji').textContent = currentChar.emoji;
   document.getElementById('combo-header-name').textContent = `${currentChar.name} のコンボ`;
   
-  renderCardList(document.getElementById('combo-cards'), getActiveMemos(), '⚔️');
+  initFilterOptions('combo');
+  updateFilteredCards();
   switchScreen('screen-detail', 'screen-combo');
 }
 
@@ -1284,14 +1481,127 @@ function goBackFromCombo() {
 }
 
 // ═══════════════════════════════════════════════════
+//  立ち回り専用画面
+// ═══════════════════════════════════════════════════
+function openNeutral() {
+  currentMemoType = 'neutral';
+  neutralMyChar = currentChar;
+  document.getElementById('neutral-header-emoji').textContent = currentChar.emoji;
+  document.getElementById('neutral-header-name').textContent = `${currentChar.name} の立ち回り`;
+  
+  initFilterOptions('neutral');
+  updateFilteredCards();
+  switchScreen('screen-detail', 'screen-neutral');
+}
+
+function goBackFromNeutral() {
+  switchScreen('screen-neutral', 'screen-detail');
+  renderTabs(currentChar); // メモカウント更新
+}
+
+// ─── 検索 & フィルター設定 ───
+function initFilterOptions(type) {
+  let selectId = '';
+  let tags = [];
+  if (type === 'cm') {
+    selectId = 'cm-filter-tag';
+    tags = ['important', 'low', 'hard', 'easy', 'stare'];
+  } else if (type === 'combo') {
+    selectId = 'combo-filter-tag';
+    tags = ['char-only', 'sa1', 'sa2', 'sa3', 'allin', 'pos'];
+  } else if (type === 'neutral') {
+    selectId = 'neutral-filter-tag';
+    tags = ['neu-all', 'neu-sit', 'neu-growth', 'neu-test', 'neu-pend', 'important'];
+  }
+  
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  
+  select.innerHTML = '<option value="">🏷️ すべてのタグ</option>';
+  tags.forEach(t => {
+    const info = TAG_LABELS[t];
+    if (info) {
+      const opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = info.label;
+      select.appendChild(opt);
+    }
+  });
+
+  // レンダリング前にインプットの初期化
+  const searchInputId = type === 'cm' ? 'cm-search' : (type === 'combo' ? 'combo-search' : 'neutral-search');
+  const searchInput = document.getElementById(searchInputId);
+  if (searchInput) searchInput.value = '';
+}
+
+function updateFilteredCards() {
+  const memos = getActiveMemos();
+  let searchInputId = '';
+  let filterSelectId = '';
+  let containerId = '';
+  let icon = '';
+
+  if (currentMemoType === 'cm') {
+    searchInputId = 'cm-search';
+    filterSelectId = 'cm-filter-tag';
+    containerId = 'cm-cards';
+    icon = '🛡️';
+  } else if (currentMemoType === 'combo') {
+    searchInputId = 'combo-search';
+    filterSelectId = 'combo-filter-tag';
+    containerId = 'combo-cards';
+    icon = '⚔️';
+  } else {
+    searchInputId = 'neutral-search';
+    filterSelectId = 'neutral-filter-tag';
+    containerId = 'neutral-cards';
+    icon = '🎯';
+  }
+
+  const searchEl = document.getElementById(searchInputId);
+  const filterEl = document.getElementById(filterSelectId);
+  const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+  const filterTag = filterEl ? filterEl.value : '';
+
+  const filtered = memos.map((m, i) => { m._originalIdx = i; return m; }).filter(m => {
+    let textMatch = true;
+    if (q) {
+      const titleMatch = (m.title || '').toLowerCase().includes(q);
+      let contentMatch = (m.content || '').toLowerCase().includes(q);
+      
+      if (m.comboParts) {
+        const partsMatch = m.comboParts.some(p => {
+          const pt = typeof p === 'string' ? p : p.text;
+          return pt.toLowerCase().includes(q);
+        });
+        if (partsMatch) contentMatch = true;
+      }
+      textMatch = titleMatch || contentMatch;
+    }
+
+    let tagMatch = true;
+    if (filterTag) {
+      tagMatch = (m.tags || []).includes(filterTag);
+    }
+
+    return textMatch && tagMatch;
+  });
+
+  renderCardList(document.getElementById(containerId), filtered, icon);
+}
+
+// ═══════════════════════════════════════════════════
 //  カード一覧レンダリング共通
 // ═══════════════════════════════════════════════════
 function getActiveMemos() {
-  return currentMemoType === 'cm' ? getCMMemos(cmMyChar.id, cmTargetChar.id) : getComboMemos(comboMyChar.id);
+  if (currentMemoType === 'cm') return getCMMemos(cmMyChar.id, cmTargetChar.id);
+  if (currentMemoType === 'combo') return getComboMemos(comboMyChar.id);
+  return getNeutralMemos(neutralMyChar.id);
 }
 function setActiveMemos(memos) {
   if (currentMemoType === 'cm') setCMMemos(cmMyChar.id, cmTargetChar.id, memos);
-  else setComboMemos(comboMyChar.id, memos);
+  else if (currentMemoType === 'combo') setComboMemos(comboMyChar.id, memos);
+  else setNeutralMemos(neutralMyChar.id, memos);
 }
 
 function renderCardList(container, memos, icon) {
@@ -1308,7 +1618,8 @@ function renderCardList(container, memos, icon) {
     return;
   }
 
-  memos.forEach((memo, idx) => {
+  memos.forEach((memo, i) => {
+    const originalIdx = memo._originalIdx !== undefined ? memo._originalIdx : i;
     const card = document.createElement('div');
     card.className = 'cm-card';
     const tagsHTML = (memo.tags || []).map(t => {
@@ -1344,8 +1655,8 @@ function renderCardList(container, memos, icon) {
     card.innerHTML = `
       <div class="cm-card-top">
         <span class="cm-card-title">${escapeHtml(memo.title || '無題')}</span>
-        <button class="cm-card-delete" title="編集" onclick="editMemoCard(${idx})">✏️</button>
-        <button class="cm-card-delete" title="削除" onclick="deleteMemoCard(${idx})">🗑️</button>
+        <button class="cm-card-delete" title="編集" onclick="editMemoCard(${originalIdx})">✏️</button>
+        <button class="cm-card-delete" title="削除" onclick="deleteMemoCard(${originalIdx})">🗑️</button>
       </div>
       ${tagsHTML ? `<div class="cm-card-tags">${tagsHTML}</div>` : ''}
       ${bodyHTML}
@@ -1379,6 +1690,11 @@ function openMemoModal(idx) {
     comboField.style.display = 'block';
     comboParts = [{ text: '', link: null }];  // 最初は空の1パーツ
     renderComboChainBuilder();
+  } else if (currentMemoType === 'neutral') {
+    titleInput.placeholder = '例：中距離の牽制、対空意識…';
+    contentInput.placeholder = '立ち回りで意識することや連携、狙いを入力…';
+    contentField.style.display = 'block';
+    comboField.style.display = 'none';
   } else {
     titleInput.placeholder = '例：対空が強い、起き攻めに注意…';
     contentInput.placeholder = '対策の詳細をメモしよう…';
@@ -1395,7 +1711,9 @@ function openMemoModal(idx) {
   tagOptionsContainer.innerHTML = '';
   
   const tagsToDisplay = (currentMemoType === 'combo') 
-    ? ['char-only', 'sa1', 'sa2', 'sa3', 'allin']
+    ? ['char-only', 'sa1', 'sa2', 'sa3', 'allin', 'pos']
+    : (currentMemoType === 'neutral')
+    ? ['neu-all', 'neu-sit', 'neu-growth', 'neu-test', 'neu-pend', 'important']
     : ['important', 'low', 'hard', 'easy', 'stare'];
     
   tagsToDisplay.forEach(tagId => {
@@ -1495,10 +1813,10 @@ function saveMemoCard() {
   closeMemoModal();
   
   if (currentMemoType === 'cm') {
-    renderCardList(document.getElementById('cm-cards'), getActiveMemos(), '🛡️');
+    updateFilteredCards();
     renderCMSidebar();
   } else {
-    renderCardList(document.getElementById('combo-cards'), getActiveMemos(), '⚔️');
+    updateFilteredCards();
   }
 }
 
@@ -1513,10 +1831,10 @@ function deleteMemoCard(idx) {
   setActiveMemos(memos);
   
   if (currentMemoType === 'cm') {
-    renderCardList(document.getElementById('cm-cards'), getActiveMemos(), '🛡️');
+    updateFilteredCards();
     renderCMSidebar();
   } else {
-    renderCardList(document.getElementById('combo-cards'), getActiveMemos(), '⚔️');
+    updateFilteredCards();
   }
 }
 
