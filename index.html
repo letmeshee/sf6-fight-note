@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF6 メモアプリ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── リセット & ベース ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d14;
+      --surface:   #16161f;
+      --card:      #1c1c2a;
+      --border:    #2e2e45;
+      --accent:    #e8001e;
+      --accent2:   #ff6b00;
+      --gold:      #f5c518;
+      --text:      #e8e8f0;
+      --text-muted:#888;
+      --radius:    12px;
+      --transition:0.25s cubic-bezier(.4,0,.2,1);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── スクリーン管理 ─── */
+    .screen { display: none; height: 100vh; flex-direction: column; overflow: hidden; }
+    .screen.active { display: flex; }
+
+    /* ─── ヘッダー ─── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #0d0d14 0%, #1a0010 100%);
+      border-bottom: 2px solid var(--accent);
+      flex-shrink: 0;
+    }
+
+    .header-back {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: background var(--transition);
+      line-height: 1;
+    }
+    .header-back:hover { background: rgba(232,0,30,0.15); }
+
+    .header-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff 0%, #ff8a80 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      flex: 1;
+    }
+
+    /* ─── キャラ一覧画面 ─── */
+    #screen-list .header-title { font-size: 26px; }
+
+    .list-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 6px 0 2px;
+      flex-shrink: 0;
+    }
+
+    .char-grid {
+      flex: 1;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      padding: 14px;
+      align-content: start;
+    }
+    .char-grid::-webkit-scrollbar { width: 5px; }
+    .char-grid::-webkit-scrollbar-track { background: transparent; }
+    .char-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .char-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .char-card:hover {
+      transform: translateY(-4px) scale(1.03);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(232,0,30,0.3);
+    }
+    .char-card:active { transform: scale(0.97); }
+
+    .char-portrait {
+      width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2a1030 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .char-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5));
+    }
+
+    .char-name {
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text);
+    }
+
+    .has-memo::after {
+      content: '●';
+      color: var(--gold);
+      font-size: 8px;
+      margin-left: 3px;
+      vertical-align: super;
+    }
+
+    /* ─── キャラ詳細画面 ─── */
+    .detail-header {
+      gap: 0;
+      flex-direction: column;
+      padding: 0;
+    }
+    .detail-header-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      width: 100%;
+    }
+    .char-detail-portrait {
+      font-size: 38px;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2a1030, #1a0820);
+      border-radius: 10px;
+      border: 1.5px solid var(--accent);
+      flex-shrink: 0;
+    }
+    .detail-char-info { flex: 1; }
+    .detail-char-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .detail-char-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ─── タブ（縦並び） ─── */
+    .tabs-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tabs-container::-webkit-scrollbar { width: 5px; }
+    .tabs-container::-webkit-scrollbar-track { background: transparent; }
+    .tabs-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .tab-section {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .tab-section.open { border-color: var(--accent); }
+
+    .tab-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      user-select: none;
+      background: var(--surface);
+      transition: background var(--transition);
+    }
+    .tab-header:hover { background: rgba(232,0,30,0.08); }
+
+    .tab-icon {
+      font-size: 20px;
+      width: 32px;
+      text-align: center;
+    }
+
+    .tab-label {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .tab-arrow {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: transform var(--transition);
+    }
+    .tab-section.open .tab-arrow { transform: rotate(180deg); color: var(--accent); }
+
+    .tab-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(.4,0,.2,1), padding 0.2s;
+    }
+    .tab-section.open .tab-content { max-height: 1000px; }
+
+    .tab-content-inner {
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px;
+      line-height: 1.7;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    textarea:focus { border-color: var(--accent); }
+    textarea::placeholder { color: var(--text-muted); }
+
+    .save-btn {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--accent), #c0001a);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity var(--transition), transform var(--transition);
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .save-btn:hover { opacity: 0.88; }
+    .save-btn:active { transform: scale(0.96); }
+    .save-btn.saved { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+    /* ─── 検索バー ─── */
+    .search-wrap {
+      padding: 0 14px 10px;
+      flex-shrink: 0;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      color: var(--text);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--text-muted); }
+
+    /* ─── ロゴ装飾 ─── */
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-badge {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+    }
+
+    /* ─── アニメーション ─── */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    #screen-detail.active { animation: slideIn 0.25s ease; }
+    #screen-list.active { animation: slideInLeft 0.2s ease; }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       専用カード追加画面 (キャラ対策 / コンボ) 共通クラス
+       ══════════════════════════════════════════════════════════════════════ */
+    .cm-layout { flex-direction: row !important; }
+    #screen-countermeasure.active, #screen-combo.active { animation: slideIn 0.25s ease; }
+
+    /* ─── 左サイドバー（キャラ選択） ※キャラ対策のみ ─── */
+    .cm-sidebar {
+      width: 72px;
+      min-width: 72px;
+      background: var(--surface);
+      border-right: 1.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .cm-sidebar-header {
+      padding: 10px 0 6px;
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .cm-sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+    .cm-sidebar-list::-webkit-scrollbar { width: 3px; }
+    .cm-sidebar-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .cm-sidebar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 4px;
+      cursor: pointer;
+      transition: background var(--transition);
+      border-left: 3px solid transparent;
+    }
+    .cm-sidebar-item:hover { background: rgba(232,0,30,0.06); }
+    .cm-sidebar-item.active {
+      background: rgba(232,0,30,0.12);
+      border-left-color: var(--accent);
+    }
+    .cm-sidebar-item .sb-emoji { font-size: 24px; }
+    .cm-sidebar-item .sb-name {
+      font-size: 9px;
+      margin-top: 3px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.2;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .cm-sidebar-item.active .sb-name { color: var(--text); }
+
+    /* ─── メイン領域 ─── */
+    .cm-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cm-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #0d0d14 0%, #1a0010 100%);
+      border-bottom: 2px solid var(--accent);
+      flex-shrink: 0;
+    }
+    .cm-header-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cm-header-emoji {
+      font-size: 28px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2a1030, #1a0820);
+      border-radius: 8px;
+      border: 1.5px solid var(--accent);
+    }
+    .cm-header-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .cm-header-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ─── メモカード一覧 ─── */
+    .cm-cards {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cm-cards::-webkit-scrollbar { width: 5px; }
+    .cm-cards::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .cm-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .cm-card:hover { border-color: #444; }
+
+    .cm-card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .cm-card-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .cm-card-delete {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: color var(--transition), background var(--transition);
+    }
+    .cm-card-delete:hover { color: #ff4444; background: rgba(255,68,68,0.1); }
+
+    .cm-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 8px 14px 0;
+    }
+    .cm-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .cm-tag-important  { background: rgba(232,0,30,0.2);  color: #ff6666; }
+    .cm-tag-low        { background: rgba(100,149,237,0.2); color: #6495ed; }
+    .cm-tag-hard       { background: rgba(255,165,0,0.2);  color: #ffb347; }
+    .cm-tag-easy       { background: rgba(46,204,113,0.2); color: #5dde8f; }
+    .cm-tag-stare      { background: rgba(155,89,182,0.2); color: #d7bde2; }
+
+    /* コンボ用タグ色 */
+    .cm-tag-char-only  { background: rgba(155,89,182,0.2); color: #bb8fce; }
+    .cm-tag-sa1        { background: rgba(241,196,15,0.2); color: #f4d03f; }
+    .cm-tag-sa2        { background: rgba(230,126,34,0.2); color: #eb984e; }
+    .cm-tag-sa3        { background: rgba(231,76,60,0.2);  color: #ec7063; }
+    .cm-tag-allin      { background: rgba(52,152,219,0.2); color: #5dade2; }
+
+    .cm-card-body {
+      padding: 10px 14px 14px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .cm-empty {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 60px 20px;
+      font-size: 14px;
+    }
+    .cm-empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+    /* ─── 追加ボタン（フローティング） ─── */
+    .cm-add-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(232,0,30,0.5);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .cm-add-btn:hover { transform: scale(1.1); box-shadow: 0 8px 28px rgba(232,0,30,0.6); }
+    .cm-add-btn:active { transform: scale(0.95); }
+
+    /* ─── メモ追加/編集モーダル ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: modalIn 0.2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header-title {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 6px;
+      transition: color var(--transition), background var(--transition);
+    }
+    .modal-close:hover { color: #ff4444; background: rgba(255,68,68,0.1); }
+
+    .modal-body { padding: 16px 18px; }
+
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .modal-field input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .modal-field input[type="text"]:focus { border-color: var(--accent); }
+    .modal-field input[type="text"]::placeholder { color: var(--text-muted); }
+
+    .modal-field textarea {
+      min-height: 120px;
+    }
+
+    /* タグ選択UI */
+    .tag-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all var(--transition);
+      user-select: none;
+    }
+    .tag-option:hover { border-color: #555; }
+    .tag-option.selected { border-color: var(--accent); }
+    .tag-option.selected[data-tag="important"] { background: rgba(232,0,30,0.15); color: #ff6666; border-color: #ff6666; }
+    .tag-option.selected[data-tag="low"]       { background: rgba(100,149,237,0.15); color: #6495ed; border-color: #6495ed; }
+    .tag-option.selected[data-tag="hard"]      { background: rgba(255,165,0,0.15); color: #ffb347; border-color: #ffb347; }
+    .tag-option.selected[data-tag="easy"]      { background: rgba(46,204,113,0.15); color: #5dde8f; border-color: #5dde8f; }
+    .tag-option.selected[data-tag="stare"]     { background: rgba(155,89,182,0.15); color: #d7bde2; border-color: #d7bde2; }
+    
+    .tag-option.selected[data-tag="char-only"] { background: rgba(155,89,182,0.15); color: #bb8fce; border-color: #bb8fce; }
+    .tag-option.selected[data-tag="sa1"]       { background: rgba(241,196,15,0.15); color: #f4d03f; border-color: #f4d03f; }
+    .tag-option.selected[data-tag="sa2"]       { background: rgba(230,126,34,0.15); color: #eb984e; border-color: #eb984e; }
+    .tag-option.selected[data-tag="sa3"]       { background: rgba(231,76,60,0.15);  color: #ec7063; border-color: #ec7063; }
+    .tag-option.selected[data-tag="allin"]     { background: rgba(52,152,219,0.15); color: #5dade2; border-color: #5dade2; }
+
+    .tag-option .tag-check { font-size: 10px; }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+    }
+    .modal-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .modal-btn:active { transform: scale(0.96); }
+    .modal-btn-cancel {
+      background: var(--card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .modal-btn-cancel:hover { color: var(--text); }
+    .modal-btn-save {
+      background: linear-gradient(135deg, var(--accent), #c0001a);
+      color: #fff;
+    }
+    .modal-btn-save:hover { opacity: 0.88; }
+
+    /* ─── コンボチェーンビルダー ─── */
+    .combo-chain-builder {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 12px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      min-height: 60px;
+    }
+    .combo-chain-builder:focus-within { border-color: var(--accent); }
+
+    .combo-part {
+      display: inline-flex;
+      align-items: center;
+      min-width: 48px;
+      min-height: 36px;
+      padding: 4px 12px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+      position: relative;
+      text-align: center;
+      justify-content: center;
+    }
+    .combo-part:hover { border-color: #555; }
+    .combo-part.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(232,0,30,0.2);
+    }
+    .combo-part.empty {
+      color: var(--text-muted);
+      font-size: 11px;
+      border-style: dashed;
+    }
+    .combo-part.filled { border-color: #444; }
+
+    .combo-part-input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      width: 100%;
+      min-width: 40px;
+      text-align: center;
+    }
+    .combo-part-input::placeholder { color: var(--text-muted); font-size: 11px; }
+
+    .combo-arrow {
+      color: var(--accent);
+      font-size: 16px;
+      flex-shrink: 0;
+      user-select: none;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .combo-arrow-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      padding: 0 4px;
+    }
+    .combo-arrow-wrapper:hover .combo-arrow {
+      color: #ff8a80;
+      transform: scale(1.2);
+    }
+    .combo-arrow-label {
+      font-size: 9px;
+      margin-bottom: -4px;
+      white-space: nowrap;
+      font-weight: 700;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 2px;
+    }
+    .label-rush  { color: #adff2f; } /* 黄緑 */
+    .label-walk  { color: var(--accent2); }
+    .label-frame { 
+      color: #000; 
+      background: #eee; 
+      border-radius: 2px; 
+      padding: 0 3px;
+      line-height: 1;
+      height: 11px;
+      margin-bottom: -1px;
+    }
+
+    /* 矢印メニュー */
+    .arrow-popup {
+      position: fixed;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 140px;
+    }
+    .arrow-popup.active { display: flex; }
+    .arrow-popup-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .arrow-popup-item:last-child { border-bottom: none; }
+    .arrow-popup-item:hover { background: rgba(232,0,30,0.1); }
+
+    .combo-part-delete {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #444;
+      color: #fff;
+      border: none;
+      font-size: 9px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .combo-part:hover .combo-part-delete { display: flex; }
+    .combo-part-delete:hover { background: #ff4444; }
+
+    /* ─── コンボチェーン表示（カード内） ─── */
+    .combo-chain-display {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px 14px;
+    }
+    .combo-chain-part {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .combo-chain-arrow {
+      color: var(--accent);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════ キャラ一覧画面 ════════════════════════════ -->
+<div id="screen-list" class="screen active">
+  <div class="header">
+    <div class="logo-wrap">
+      <span class="logo-badge">SF6</span>
+      <span class="header-title">キャラメモ帳</span>
+    </div>
+  </div>
+  <div class="list-subtitle">キャラを選んでメモを記録しよう ⚡</div>
+  <div class="search-wrap" style="margin-top:10px;">
+    <input class="search-input" id="search-input" type="text" placeholder="🔍 キャラを検索…" oninput="filterChars()" />
+  </div>
+  <div class="char-grid" id="char-grid"></div>
+</div>
+
+<!-- ════════════════════════════ キャラ詳細画面 ════════════════════════════ -->
+<div id="screen-detail" class="screen">
+  <div class="header detail-header">
+    <div class="detail-header-top">
+      <button class="header-back" onclick="goBack()">&#8592;</button>
+      <div class="char-detail-portrait" id="detail-portrait"></div>
+      <div class="detail-char-info">
+        <div class="detail-char-name" id="detail-name"></div>
+        <div class="detail-char-sub">メモを記録しよう</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-container" id="tabs-container"></div>
+</div>
+
+<!-- ════════════════════════════ キャラ対策専用画面 ════════════════════════════ -->
+<div id="screen-countermeasure" class="screen cm-layout">
+  <!-- 左サイドバー -->
+  <div class="cm-sidebar">
+    <div class="cm-sidebar-header">VS</div>
+    <div class="cm-sidebar-list" id="cm-sidebar-list"></div>
+  </div>
+  <!-- メインコンテンツ -->
+  <div class="cm-main">
+    <div class="cm-header">
+      <button class="header-back" onclick="goBackFromCM()">&#8592;</button>
+      <div class="cm-header-info">
+        <div class="cm-header-emoji" id="cm-header-emoji"></div>
+        <div>
+          <div class="cm-header-name" id="cm-header-name"></div>
+          <div class="cm-header-label">🛡️ キャラ対策メモ</div>
+        </div>
+      </div>
+    </div>
+    <div class="cm-cards" id="cm-cards"></div>
+    <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════ コンボ専用画面 ════════════════════════════ -->
+<div id="screen-combo" class="screen">
+  <div class="cm-main">
+    <div class="cm-header">
+      <button class="header-back" onclick="goBackFromCombo()">&#8592;</button>
+      <div class="cm-header-info">
+        <div class="cm-header-emoji" id="combo-header-emoji"></div>
+        <div>
+          <div class="cm-header-name" id="combo-header-name"></div>
+          <div class="cm-header-label">⚔️ コンボメモ</div>
+        </div>
+      </div>
+    </div>
+    <div class="cm-cards" id="combo-cards"></div>
+    <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════ メモ追加/編集モーダル ════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeMemoModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-header-title" id="modal-title">📝 メモを追加</span>
+      <button class="modal-close" onclick="closeMemoModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label>タイトル</label>
+        <input type="text" id="memo-input-title" placeholder="（例：対空が強い、起き攻めに注意…）" />
+      </div>
+      <div class="modal-field">
+        <label>タグ（複数選択可）</label>
+        <div class="tag-options" id="tag-options">
+          <div class="tag-option" data-tag="important" onclick="toggleTagOption(this)">
+            <span class="tag-check">○</span> 🔴 重要
+          </div>
+          <div class="tag-option" data-tag="low" onclick="toggleTagOption(this)">
+            <span class="tag-check">○</span> 🔵 優先度低め
+          </div>
+          <div class="tag-option" data-tag="hard" onclick="toggleTagOption(this)">
+            <span class="tag-check">○</span> 🟠 難しい
+          </div>
+          <div class="tag-option" data-tag="easy" onclick="toggleTagOption(this)">
+            <span class="tag-check">○</span> 🟢 簡単
+          </div>
+        </div>
+      </div>
+      <div class="modal-field" id="modal-field-content">
+        <label>内容</label>
+        <textarea id="memo-input-content" placeholder="メモの詳細を入力…"></textarea>
+      </div>
+      <div class="modal-field" id="modal-field-combo" style="display:none;">
+        <label>コンボ内容（パーツをタップして入力）</label>
+        <div class="combo-chain-builder" id="combo-chain-builder"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel" onclick="closeMemoModal()">キャンセル</button>
+      <button class="modal-btn modal-btn-save" onclick="saveMemoCard()">💾 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 矢印編集メニュー -->
+<div id="arrow-popup" class="arrow-popup">
+  <div class="arrow-popup-item" onclick="setArrowLink('rush')">💨 キャンセルラッシュ</div>
+  <div class="arrow-popup-item" onclick="setArrowLink('walk')">👣 微歩き</div>
+  <div class="arrow-popup-item" onclick="setArrowLink('frame')">⏱️ フレーム数...</div>
+  <div class="arrow-popup-item" onclick="setArrowLink(null)" style="color: #ff4444;">❌ 通常の矢印に戻す</div>
+</div>
+
+<script>
+// ─── キャラクターデータ ───
+const CHARACTERS = [
+  { id:'ryu',      name:'リュウ',       emoji:'🥋', origin:'日本' },
+  { id:'ken',      name:'ケン',         emoji:'🔥', origin:'アメリカ' },
+  { id:'chun-li',  name:'春麗',         emoji:'💙', origin:'中国' },
+  { id:'guile',    name:'ガイル',       emoji:'🇺🇸', origin:'アメリカ' },
+  { id:'blanka',   name:'ブランカ',     emoji:'⚡', origin:'ブラジル' },
+  { id:'dhalsim',  name:'ダルシム',     emoji:'🔮', origin:'インド' },
+  { id:'ehonda',   name:'E・本田',      emoji:'🎌', origin:'日本' },
+  { id:'zangief',  name:'ザンギエフ',  emoji:'🐻', origin:'ロシア' },
+  { id:'cammy',    name:'キャミィ',     emoji:'🌿', origin:'イギリス' },
+  { id:'deejay',   name:'ディージェイ',emoji:'🎵', origin:'ジャマイカ' },
+  { id:'luke',     name:'ルーク',       emoji:'🤜', origin:'アメリカ' },
+  { id:'jamie',    name:'ジェイミー',   emoji:'🍶', origin:'中国' },
+  { id:'kimberly', name:'キンバリー',   emoji:'🌸', origin:'アメリカ' },
+  { id:'manon',    name:'マノン',       emoji:'🥇', origin:'フランス' },
+  { id:'marisa',   name:'マリーザ',     emoji:'🏛️', origin:'イタリア' },
+  { id:'lily',     name:'リリー',       emoji:'💨', origin:'アメリカ' },
+  { id:'jp',       name:'JP',           emoji:'🦯', origin:'ロシア' },
+  { id:'juri',     name:'ジュリ',       emoji:'👢', origin:'韓国' },
+  { id:'rashid',   name:'ラシード',     emoji:'🌪️', origin:'中東' },
+  { id:'aki',      name:'A.K.I.',       emoji:'🐍', origin:'中国' },
+  { id:'ed',       name:'エド',         emoji:'🥊', origin:'イギリス' },
+  { id:'akuma',    name:'豪鬼',         emoji:'👹', origin:'日本' },
+  { id:'mbison',   name:'ベガ',         emoji:'👾', origin:'不明' },
+  { id:'terry',    name:'テリー',       emoji:'🧢', origin:'アメリカ' },
+  { id:'mai',      name:'舞',           emoji:'🦋', origin:'日本' },
+  { id:'elena',    name:'エレナ',       emoji:'🌍', origin:'ケニア' },
+];
+
+const TABS = [
+  { id:'countermeasure', label:'キャラ対策', icon:'🛡️',  isCm: true },
+  { id:'combo',          label:'コンボ',     icon:'⚔️',  isCombo: true },
+  { id:'neutral',        label:'立ち回り',   icon:'🎯', placeholder:'立ち回りメモ…\n例：中距離では〇〇を軸に、飛びには〇〇で対空' },
+  { id:'other',          label:'その他',     icon:'📝',  placeholder:'その他のメモ…\n例：セットプレイ、起き攻め、注意点など' },
+];
+
+const TAG_LABELS = {
+  important:   { label:'重要',       cssClass:'cm-tag-important' },
+  low:         { label:'優先度低め',   cssClass:'cm-tag-low' },
+  hard:        { label:'難しい',      cssClass:'cm-tag-hard' },
+  easy:        { label:'簡単',        cssClass:'cm-tag-easy' },
+  stare:       { label:'ガン見',      cssClass:'cm-tag-stare' },
+  // コンボ用
+  'char-only': { label:'キャラ限定',   cssClass:'cm-tag-char-only' },
+  sa1:         { label:'SA1',        cssClass:'cm-tag-sa1' },
+  sa2:         { label:'SA2',        cssClass:'cm-tag-sa2' },
+  sa3:         { label:'SA3',        cssClass:'cm-tag-sa3' },
+  allin:       { label:'オールイン',   cssClass:'cm-tag-allin' },
+};
+
+let currentChar = null;
+
+// CM(キャラ対策)状態
+let cmMyChar = null;       
+let cmTargetChar = null;   
+
+// Combo(コンボ)状態
+let comboMyChar = null;
+
+// モーダル状態
+let currentMemoType = 'cm'; // 'cm' or 'combo'
+let editingMemoIdx = -1;   // 編集中のメモインデックス(-1=新規)
+
+// ─── ユーティリティ ───
+function storageKey(charId, tabId) { return `sf6memo_${charId}_${tabId}`; }
+function cmStorageKey(myCharId, targetCharId) { return `sf6cm_${myCharId}_vs_${targetCharId}`; }
+function comboStorageKey(charId) { return `sf6combo_${charId}`; }
+
+function getCMMemos(myCharId, targetCharId) {
+  const raw = localStorage.getItem(cmStorageKey(myCharId, targetCharId));
+  return raw ? JSON.parse(raw) : [];
+}
+function setCMMemos(myCharId, targetCharId, memos) {
+  localStorage.setItem(cmStorageKey(myCharId, targetCharId), JSON.stringify(memos));
+}
+
+function getComboMemos(charId) {
+  const raw = localStorage.getItem(comboStorageKey(charId));
+  return raw ? JSON.parse(raw) : [];
+}
+function setComboMemos(charId, memos) {
+  localStorage.setItem(comboStorageKey(charId), JSON.stringify(memos));
+}
+
+function hasMemo(charId) {
+  // 通常タブのメモ
+  const normalMemo = TABS.filter(t => !t.isCm && !t.isCombo).some(t =>
+    (localStorage.getItem(storageKey(charId, t.id)) || '').trim() !== ''
+  );
+  if (normalMemo) return true;
+  // コンボメモ
+  if (getComboMemos(charId).length > 0) return true;
+  // キャラ対策のメモ
+  return CHARACTERS.some(c => getCMMemos(charId, c.id).length > 0);
+}
+
+// ═══════════════════════════════════════════════════
+//  キャラ一覧画面
+// ═══════════════════════════════════════════════════
+function renderCharGrid(chars) {
+  const grid = document.getElementById('char-grid');
+  grid.innerHTML = '';
+  chars.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'char-card';
+    div.innerHTML = `
+      <div class="char-portrait">${c.emoji}</div>
+      <div class="char-name${hasMemo(c.id) ? ' has-memo':''}">${c.name}</div>
+    `;
+    div.addEventListener('click', () => openDetail(c));
+    grid.appendChild(div);
+  });
+}
+
+function filterChars() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const filtered = q
+    ? CHARACTERS.filter(c => c.name.toLowerCase().includes(q) || c.id.includes(q))
+    : CHARACTERS;
+  renderCharGrid(filtered);
+}
+
+// ═══════════════════════════════════════════════════
+//  キャラ詳細画面
+// ═══════════════════════════════════════════════════
+function switchScreen(hideId, showId) {
+  document.getElementById(hideId).classList.remove('active');
+  document.getElementById(showId).classList.add('active');
+}
+
+function openDetail(char) {
+  currentChar = char;
+  document.getElementById('detail-portrait').textContent = char.emoji;
+  document.getElementById('detail-name').textContent = char.name;
+  renderTabs(char);
+  switchScreen('screen-list', 'screen-detail');
+}
+
+function renderTabs(char) {
+  const container = document.getElementById('tabs-container');
+  container.innerHTML = '';
+
+  TABS.forEach((tab, idx) => {
+    const section = document.createElement('div');
+    section.className = 'tab-section';
+    section.id = `tab-sec-${tab.id}`;
+
+    if (tab.isCm || tab.isCombo) {
+      // 専用画面へ遷移するボタン（キャラ対策 または コンボ）
+      let count = 0;
+      let action = '';
+      if (tab.isCm) {
+        count = CHARACTERS.reduce((sum, c) => sum + getCMMemos(char.id, c.id).length, 0);
+        action = 'openCountermeasure()';
+      } else {
+        count = getComboMemos(char.id).length;
+        action = 'openCombo()';
+      }
+      section.innerHTML = `
+        <div class="tab-header" onclick="${action}">
+          <span class="tab-icon">${tab.icon}</span>
+          <span class="tab-label">${tab.label}</span>
+          <span style="font-size:11px;color:var(--text-muted);">${count > 0 ? count + '件のメモ' : ''}</span>
+          <span class="tab-arrow" style="transform:rotate(-90deg);">▼</span>
+        </div>
+      `;
+    } else {
+      const saved = localStorage.getItem(storageKey(char.id, tab.id)) || '';
+      section.innerHTML = `
+        <div class="tab-header" onclick="toggleTab('${tab.id}')">
+          <span class="tab-icon">${tab.icon}</span>
+          <span class="tab-label">${tab.label}</span>
+          <span class="tab-arrow">▼</span>
+        </div>
+        <div class="tab-content">
+          <div class="tab-content-inner">
+            <textarea
+              id="memo-${tab.id}"
+              placeholder="${tab.placeholder}"
+            >${saved}</textarea>
+            <button class="save-btn" id="btn-${tab.id}" onclick="saveMemo('${tab.id}')">💾 保存</button>
+          </div>
+        </div>
+      `;
+    }
+    container.appendChild(section);
+  });
+}
+
+function toggleTab(tabId) {
+  const section = document.getElementById(`tab-sec-${tabId}`);
+  const isOpen = section.classList.contains('open');
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('open'));
+  if (!isOpen) section.classList.add('open');
+}
+
+function saveMemo(tabId) {
+  if (!currentChar) return;
+  const val = document.getElementById(`memo-${tabId}`).value;
+  localStorage.setItem(storageKey(currentChar.id, tabId), val);
+  const btn = document.getElementById(`btn-${tabId}`);
+  btn.textContent = '✅ 保存しました！';
+  btn.classList.add('saved');
+  setTimeout(() => { btn.textContent = '💾 保存'; btn.classList.remove('saved'); }, 1800);
+}
+
+function goBack() {
+  switchScreen('screen-detail', 'screen-list');
+  filterChars();
+}
+
+// ═══════════════════════════════════════════════════
+//  キャラ対策専用画面
+// ═══════════════════════════════════════════════════
+function openCountermeasure() {
+  currentMemoType = 'cm';
+  cmMyChar = currentChar;
+  cmTargetChar = CHARACTERS[0]; // デフォルト: 最初のキャラ
+  renderCMSidebar();
+  selectCMTarget(cmTargetChar);
+  switchScreen('screen-detail', 'screen-countermeasure');
+}
+
+function goBackFromCM() {
+  switchScreen('screen-countermeasure', 'screen-detail');
+  renderTabs(currentChar); // メモカウント更新
+}
+
+function renderCMSidebar() {
+  const list = document.getElementById('cm-sidebar-list');
+  list.innerHTML = '';
+  CHARACTERS.forEach(c => {
+    const memoCount = getCMMemos(cmMyChar.id, c.id).length;
+    const item = document.createElement('div');
+    item.className = 'cm-sidebar-item' + (c.id === cmTargetChar.id ? ' active' : '');
+    item.innerHTML = `
+      <span class="sb-emoji">${c.emoji}</span>
+      <span class="sb-name">${c.name}${memoCount ? ' ('+memoCount+')' : ''}</span>
+    `;
+    item.addEventListener('click', () => selectCMTarget(c));
+    list.appendChild(item);
+  });
+}
+
+function selectCMTarget(char) {
+  cmTargetChar = char;
+  // ヘッダー更新
+  document.getElementById('cm-header-emoji').textContent = char.emoji;
+  document.getElementById('cm-header-name').textContent = `${cmMyChar.name} vs ${char.name}`;
+  // サイドバーのactive更新
+  document.querySelectorAll('.cm-sidebar-item').forEach((el, i) => {
+    el.classList.toggle('active', CHARACTERS[i].id === char.id);
+  });
+  renderCardList(document.getElementById('cm-cards'), getActiveMemos(), '🛡️');
+}
+
+// ═══════════════════════════════════════════════════
+//  コンボ専用画面
+// ═══════════════════════════════════════════════════
+function openCombo() {
+  currentMemoType = 'combo';
+  comboMyChar = currentChar;
+  document.getElementById('combo-header-emoji').textContent = currentChar.emoji;
+  document.getElementById('combo-header-name').textContent = `${currentChar.name} のコンボ`;
+  
+  renderCardList(document.getElementById('combo-cards'), getActiveMemos(), '⚔️');
+  switchScreen('screen-detail', 'screen-combo');
+}
+
+function goBackFromCombo() {
+  switchScreen('screen-combo', 'screen-detail');
+  renderTabs(currentChar); // メモカウント更新
+}
+
+// ═══════════════════════════════════════════════════
+//  カード一覧レンダリング共通
+// ═══════════════════════════════════════════════════
+function getActiveMemos() {
+  return currentMemoType === 'cm' ? getCMMemos(cmMyChar.id, cmTargetChar.id) : getComboMemos(comboMyChar.id);
+}
+function setActiveMemos(memos) {
+  if (currentMemoType === 'cm') setCMMemos(cmMyChar.id, cmTargetChar.id, memos);
+  else setComboMemos(comboMyChar.id, memos);
+}
+
+function renderCardList(container, memos, icon) {
+  container.innerHTML = '';
+
+  if (memos.length === 0) {
+    container.innerHTML = `
+      <div class="cm-empty">
+        <div class="cm-empty-icon">${icon}</div>
+        <div>まだメモがありません</div>
+        <div style="margin-top:4px;font-size:12px;color:#666;">＋ボタンでメモを追加しよう</div>
+      </div>
+    `;
+    return;
+  }
+
+  memos.forEach((memo, idx) => {
+    const card = document.createElement('div');
+    card.className = 'cm-card';
+    const tagsHTML = (memo.tags || []).map(t => {
+      const info = TAG_LABELS[t];
+      return info ? `<span class="cm-tag ${info.cssClass}">${info.label}</span>` : '';
+    }).join('');
+
+    // コンボの場合はチェーン表示
+    let bodyHTML;
+    if (memo.comboParts && memo.comboParts.length > 0) {
+      const chainHTML = memo.comboParts.map((part, i) => {
+        const textVal = typeof part === 'string' ? part : part.text;
+        const linkVal = typeof part === 'string' ? null : part.link;
+        let html = `<span class="combo-chain-part">${escapeHtml(textVal)}</span>`;
+        if (i < memo.comboParts.length - 1) {
+          if (linkVal) {
+            const colorClass = linkVal.type === 'rush' ? 'label-rush' : (linkVal.type === 'frame' ? 'label-frame' : 'label-walk');
+            html += `<span style="display:inline-flex; flex-direction:column; align-items:center; margin: 0 4px; vertical-align: middle;">
+                       <span class="combo-arrow-label ${colorClass}">${escapeHtml(linkVal.label)}</span>
+                       <span class="combo-chain-arrow">→</span>
+                     </span>`;
+          } else {
+            html += `<span class="combo-chain-arrow" style="margin: 0 4px;">→</span>`;
+          }
+        }
+        return html;
+      }).join('');
+      bodyHTML = `<div class="combo-chain-display">${chainHTML}</div>`;
+    } else {
+      bodyHTML = `<div class="cm-card-body">${escapeHtml(memo.content || '')}</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="cm-card-top">
+        <span class="cm-card-title">${escapeHtml(memo.title || '無題')}</span>
+        <button class="cm-card-delete" title="編集" onclick="editMemoCard(${idx})">✏️</button>
+        <button class="cm-card-delete" title="削除" onclick="deleteMemoCard(${idx})">🗑️</button>
+      </div>
+      ${tagsHTML ? `<div class="cm-card-tags">${tagsHTML}</div>` : ''}
+      ${bodyHTML}
+    `;
+    container.appendChild(card);
+  });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ─── モーダル ───
+function openMemoModal(idx) {
+  editingMemoIdx = (idx !== undefined) ? idx : -1;
+  const isEdit = editingMemoIdx >= 0;
+
+  document.getElementById('modal-title').textContent = isEdit ? '✏️ メモを編集' : '📝 メモを追加';
+  
+  // モーダル内のプレースホルダーをタイプによって切り替え
+  const titleInput = document.getElementById('memo-input-title');
+  const contentInput = document.getElementById('memo-input-content');
+  const contentField = document.getElementById('modal-field-content');
+  const comboField = document.getElementById('modal-field-combo');
+
+  if (currentMemoType === 'combo') {
+    titleInput.placeholder = '例：画面端 弱K始動';
+    contentField.style.display = 'none';
+    comboField.style.display = 'block';
+    comboParts = [{ text: '', link: null }];  // 最初は空の1パーツ
+    renderComboChainBuilder();
+  } else {
+    titleInput.placeholder = '例：対空が強い、起き攻めに注意…';
+    contentInput.placeholder = '対策の詳細をメモしよう…';
+    contentField.style.display = 'block';
+    comboField.style.display = 'none';
+  }
+
+  // 入力値のリセット
+  titleInput.value = '';
+  contentInput.value = '';
+
+  // タグオプションの生成
+  const tagOptionsContainer = document.getElementById('tag-options');
+  tagOptionsContainer.innerHTML = '';
+  
+  const tagsToDisplay = (currentMemoType === 'combo') 
+    ? ['char-only', 'sa1', 'sa2', 'sa3', 'allin']
+    : ['important', 'low', 'hard', 'easy', 'stare'];
+    
+  tagsToDisplay.forEach(tagId => {
+    const info = TAG_LABELS[tagId];
+    const opt = document.createElement('div');
+    opt.className = 'tag-option';
+    opt.dataset.tag = tagId;
+    opt.onclick = () => toggleTagOption(opt);
+    opt.innerHTML = `<span class="tag-check">○</span> ${info.label}`;
+    tagOptionsContainer.appendChild(opt);
+  });
+
+  if (isEdit) {
+    const memos = getActiveMemos();
+    const memo = memos[editingMemoIdx];
+    titleInput.value = memo.title || '';
+    if (currentMemoType === 'combo' && memo.comboParts) {
+      const loaded = memo.comboParts.map(p => {
+        if (typeof p === 'string') return { text: p, link: null };
+        return { text: p.text, link: p.link };
+      });
+      comboParts = [...loaded, { text: '', link: null }];  // 末尾に空パーツ追加
+      renderComboChainBuilder();
+    } else {
+      contentInput.value = memo.content || '';
+    }
+    (memo.tags || []).forEach(tag => {
+      const el = document.querySelector(`.tag-option[data-tag="${tag}"]`);
+      if (el) {
+        el.classList.add('selected');
+        el.querySelector('.tag-check').textContent = '●';
+      }
+    });
+  }
+
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
+function closeMemoModal(event) {
+  const arrowPopup = document.getElementById('arrow-popup');
+
+  if (event) {
+    // 背景（overlay）をタップした場合の処理
+    if (event.target === document.getElementById('modal-overlay')) {
+      if (arrowPopup && arrowPopup.classList.contains('active')) {
+        arrowPopup.classList.remove('active');
+        document.removeEventListener('click', closeArrowMenuOnce);
+      }
+      // メインのメモ入力モーダルは閉じないようにする
+      return;
+    }
+    // モーダルの内側をタップした場合は何もしない
+    return;
+  }
+
+  // 引数なし（Xボタンやキャンセルボタン）の場合は、モーダルを閉じる
+  document.getElementById('modal-overlay').classList.remove('active');
+  if (arrowPopup) arrowPopup.classList.remove('active');
+  document.removeEventListener('click', closeArrowMenuOnce);
+}
+
+function toggleTagOption(el) {
+  el.classList.toggle('selected');
+  el.querySelector('.tag-check').textContent = el.classList.contains('selected') ? '●' : '○';
+}
+
+function saveMemoCard() {
+  const title   = document.getElementById('memo-input-title').value.trim();
+  const tags    = Array.from(document.querySelectorAll('.tag-option.selected')).map(el => el.dataset.tag);
+  
+  let memoData;
+  if (currentMemoType === 'combo') {
+    const filledParts = comboParts.filter(p => p.text.trim() !== '');
+    if (!title && filledParts.length === 0) {
+      alert('タイトルかコンボパーツを入力してください');
+      return;
+    }
+    memoData = { title, tags, comboParts: filledParts, content: '' };
+  } else {
+    const content = document.getElementById('memo-input-content').value.trim();
+    if (!title && !content) {
+      alert('タイトルか内容を入力してください');
+      return;
+    }
+    memoData = { title, tags, content };
+  }
+
+  const memos = getActiveMemos();
+
+  if (editingMemoIdx >= 0) {
+    memos[editingMemoIdx] = memoData;
+  } else {
+    memos.push(memoData);
+  }
+
+  setActiveMemos(memos);
+  closeMemoModal();
+  
+  if (currentMemoType === 'cm') {
+    renderCardList(document.getElementById('cm-cards'), getActiveMemos(), '🛡️');
+    renderCMSidebar();
+  } else {
+    renderCardList(document.getElementById('combo-cards'), getActiveMemos(), '⚔️');
+  }
+}
+
+function editMemoCard(idx) {
+  openMemoModal(idx);
+}
+
+function deleteMemoCard(idx) {
+  if (!confirm('このメモを削除しますか？')) return;
+  const memos = getActiveMemos();
+  memos.splice(idx, 1);
+  setActiveMemos(memos);
+  
+  if (currentMemoType === 'cm') {
+    renderCardList(document.getElementById('cm-cards'), getActiveMemos(), '🛡️');
+    renderCMSidebar();
+  } else {
+    renderCardList(document.getElementById('combo-cards'), getActiveMemos(), '⚔️');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  コンボチェーンビルダー
+// ═══════════════════════════════════════════════════
+let comboParts = [{ text: '', link: null }];
+let editingArrowIdx = -1;
+
+function openArrowMenu(idx, event) {
+  editingArrowIdx = idx;
+  const popup = document.getElementById('arrow-popup');
+  popup.style.left = event.clientX + 'px';
+  popup.style.top = event.clientY + 'px';
+  popup.classList.add('active');
+  setTimeout(() => document.addEventListener('click', closeArrowMenuOnce), 10);
+}
+
+function closeArrowMenuOnce(e) {
+  const popup = document.getElementById('arrow-popup');
+  if (!popup.contains(e.target)) {
+    popup.classList.remove('active');
+    document.removeEventListener('click', closeArrowMenuOnce);
+  }
+}
+
+function setArrowLink(type) {
+  const popup = document.getElementById('arrow-popup');
+  popup.classList.remove('active');
+  document.removeEventListener('click', closeArrowMenuOnce);
+  if (editingArrowIdx < 0) return;
+  
+  let linkObj = null;
+  if (type === 'rush') linkObj = { type: 'rush', label: 'キャンセルラッシュ' };
+  else if (type === 'walk') linkObj = { type: 'walk', label: '微歩き' };
+  else if (type === 'frame') {
+    const f = prompt('フレーム数を半角数字で入力してください (例: 4)');
+    if (f === null || f.trim() === '') return;
+    linkObj = { type: 'frame', label: `${f.trim()}F` };
+  }
+  comboParts[editingArrowIdx].link = linkObj;
+  renderComboChainBuilder();
+}
+
+function renderComboChainBuilder() {
+  const container = document.getElementById('combo-chain-builder');
+  container.innerHTML = '';
+
+  comboParts.forEach((part, idx) => {
+    // 矢印（最初のパーツ以外に表示）
+    if (idx > 0) {
+      const prevPart = comboParts[idx - 1];
+      const arrowWrap = document.createElement('div');
+      arrowWrap.className = 'combo-arrow-wrapper';
+      arrowWrap.onclick = (e) => { e.stopPropagation(); openArrowMenu(idx - 1, e); };
+      
+      const arrowLabel = document.createElement('div');
+      if (prevPart.link) {
+        arrowLabel.className = 'combo-arrow-label ' + (prevPart.link.type === 'rush' ? 'label-rush' : (prevPart.link.type === 'frame' ? 'label-frame' : 'label-walk'));
+        arrowLabel.textContent = prevPart.link.label;
+      } else {
+        arrowLabel.className = 'combo-arrow-label';
+        arrowLabel.textContent = '';
+      }
+      
+      const arrowIcon = document.createElement('div');
+      arrowIcon.className = 'combo-arrow';
+      arrowIcon.textContent = '→';
+      
+      arrowWrap.appendChild(arrowLabel);
+      arrowWrap.appendChild(arrowIcon);
+      container.appendChild(arrowWrap);
+    }
+
+    // パーツ長方形
+    const box = document.createElement('div');
+    const hasText = part.text.trim() !== '';
+    box.className = 'combo-part' + (hasText ? ' filled' : ' empty');
+    box.dataset.idx = idx;
+
+    if (hasText) {
+      // 入力済み：テキスト表示 + 削除ボタン
+      box.textContent = part.text;
+      
+      // 削除ボタン（パーツが2つ以上の場合のみ）
+      if (comboParts.filter(p => p.text.trim() !== '').length > 1 || comboParts.length > 1) {
+        const del = document.createElement('button');
+        del.className = 'combo-part-delete';
+        del.textContent = '✕';
+        del.onclick = (e) => { e.stopPropagation(); deleteComboPart(idx); };
+        box.appendChild(del);
+      }
+
+      // クリックで再編集
+      box.onclick = () => editComboPart(idx);
+    } else {
+      // 空パーツ：クリックで入力開始
+      box.textContent = 'タップ';
+      box.onclick = () => editComboPart(idx);
+    }
+
+    container.appendChild(box);
+  });
+}
+
+function editComboPart(idx) {
+  const container = document.getElementById('combo-chain-builder');
+  // 既存の全パーツを再描画（他の編集中を閉じる）
+  renderComboChainBuilder();
+  
+  // 対象パーツを入力モードに切り替え
+  const boxes = container.querySelectorAll('.combo-part');
+  const box = boxes[idx];
+  if (!box) return;
+
+  box.className = 'combo-part active';
+  box.textContent = '';
+  box.onclick = null;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'combo-part-input';
+  input.value = comboParts[idx].text || '';
+  input.placeholder = '入力…';
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      finishComboPart(idx, input.value);
+    }
+  });
+
+  input.addEventListener('blur', () => {
+    finishComboPart(idx, input.value);
+  });
+
+  box.appendChild(input);
+  input.focus();
+}
+
+function finishComboPart(idx, value) {
+  const trimmed = value.trim();
+  comboParts[idx].text = trimmed;
+
+  if (trimmed !== '') {
+    // 最後のパーツに入力されたら、後ろに空パーツを追加
+    const lastFilledIdx = comboParts.length - 1;
+    if (idx === lastFilledIdx || (idx === comboParts.length - 1)) {
+      // 末尾に空パーツがなければ追加
+      if (comboParts[comboParts.length - 1].text !== '') {
+        comboParts.push({ text: '', link: null });
+      }
+    }
+  }
+
+  // 空パーツが連続しないよう整理（末尾の空1つだけ残す）
+  while (comboParts.length > 1 && comboParts[comboParts.length - 1].text === '' && comboParts[comboParts.length - 2].text === '') {
+    comboParts.pop();
+  }
+
+  renderComboChainBuilder();
+}
+
+function deleteComboPart(idx) {
+  comboParts.splice(idx, 1);
+  if (comboParts.length === 0) comboParts = [{ text: '', link: null }];
+  // 末尾に空パーツがなければ追加
+  if (comboParts[comboParts.length - 1].text !== '') comboParts.push({ text: '', link: null });
+  renderComboChainBuilder();
+}
+
+// ─── 初期化 ───
+renderCharGrid(CHARACTERS);
+</script>
+</body>
+</html>
