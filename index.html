@@ -30,6 +30,7 @@
       --text-muted:#888;
       --radius:    12px;
       --transition:0.25s cubic-bezier(.4,0,.2,1);
+      --char-size: 85px;
     }
 
     body.light-theme {
@@ -145,11 +146,45 @@
       flex-shrink: 0;
     }
 
+    .size-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      margin-top: 10px;
+      flex-shrink: 0;
+    }
+    .size-slider-wrap label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .char-size-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      outline: none;
+    }
+    .char-size-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid var(--card);
+    }
+
     .char-grid {
       flex: 1;
       overflow-y: auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(var(--char-size), 1fr));
       gap: 12px;
       padding: 14px 14px 80px;
       align-content: start;
@@ -999,6 +1034,10 @@
   <div class="search-wrap" style="margin-top:10px;">
     <input class="search-input" id="search-input" type="text" placeholder="🔍 キャラを検索…" oninput="filterChars()" />
   </div>
+  <div class="size-slider-wrap">
+    <label for="char-size-slider">⚙️ アイコンサイズ</label>
+    <input type="range" class="char-size-slider" id="char-size-slider" min="60" max="150" step="5" value="85" oninput="updateCharSize()">
+  </div>
   <div class="char-grid" id="char-grid"></div>
 </div>
 
@@ -1175,6 +1214,26 @@ function applySavedTheme() {
   }
 }
 applySavedTheme();
+
+// ─── キャラ表のサイズ変更 ───
+function updateCharSize() {
+  const slider = document.getElementById('char-size-slider');
+  if (slider) {
+    const size = slider.value;
+    document.documentElement.style.setProperty('--char-size', size + 'px');
+    localStorage.setItem('sf6memo_char_size', size);
+  }
+}
+
+function applySavedCharSize() {
+  const saved = localStorage.getItem('sf6memo_char_size');
+  const slider = document.getElementById('char-size-slider');
+  if (saved) {
+    document.documentElement.style.setProperty('--char-size', saved + 'px');
+    if (slider) slider.value = saved;
+  }
+}
+applySavedCharSize();
 
 // ─── キャラクターデータ ───
 const CHARACTERS = [
