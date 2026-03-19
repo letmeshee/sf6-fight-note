@@ -114,13 +114,20 @@
       position: relative;
     }
 
-    .theme-toggle {
+    .header-actions {
       position: absolute;
       right: 16px;
       top: 50%;
       transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      z-index: 10;
+    }
+    
+    .theme-toggle, .icon-btn {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: var(--surface);
       border: 1.5px solid var(--border);
@@ -128,14 +135,14 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 20px;
+      font-size: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       transition: all var(--transition);
-      z-index: 10;
+      color: var(--text);
     }
-    .theme-toggle:hover {
+    .theme-toggle:hover, .icon-btn:hover {
       border-color: var(--accent);
-      transform: translateY(-50%) scale(1.1);
+      transform: scale(1.1);
     }
 
     .list-subtitle {
@@ -1028,7 +1035,13 @@
 <div id="screen-list" class="screen active">
   <div class="header">
     <img src="assets/logo.png" alt="Fight Note" class="header-logo">
-    <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">🌙</div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="exportData()" title="データを書き出し（バックアップ）">📤</button>
+      <label class="icon-btn" title="データをマージして取り込み">
+        📥<input type="file" accept=".json" style="display:none;" onchange="importData(event)">
+      </label>
+      <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">🌙</div>
+    </div>
   </div>
   <div class="list-subtitle">キャラを選んでメモを記録しよう ⚡</div>
   <div class="search-wrap" style="margin-top:10px;">
@@ -1234,6 +1247,93 @@ function applySavedCharSize() {
   }
 }
 applySavedCharSize();
+
+// ─── データインポート・エクスポート（マージ機能） ───
+function exportData() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('sf6')) {
+      data[key] = localStorage.getItem(key);
+    }
+  }
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  a.download = `sf6_fight_note_data_${date}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      let importedCount = 0;
+
+      for (const key in importedData) {
+        if (!key.startsWith('sf6')) continue;
+        
+        const newValueStr = importedData[key];
+        const existingValueStr = localStorage.getItem(key);
+
+        // 設定（テーマやサイズ）は読み込まない（または上書きでもよいが、今回はスキップしてマージ対象に専念）
+        if (key === 'sf6memo_theme' || key === 'sf6memo_char_size') {
+          continue; 
+        }
+
+        if (!existingValueStr) {
+          // 既存データなしならそのまま保存
+          localStorage.setItem(key, newValueStr);
+          importedCount++;
+          continue;
+        }
+
+        // 既存データとのマージ処理
+        try {
+          const existingArr = JSON.parse(existingValueStr);
+          if (Array.isArray(existingArr)) {
+            const newArr = JSON.parse(newValueStr);
+            if (Array.isArray(newArr)) {
+              // 配列の場合は結合
+              const merged = existingArr.concat(newArr);
+              localStorage.setItem(key, JSON.stringify(merged));
+            }
+          } else {
+            // 文字列化された非配列JSONの場合は上書き
+            localStorage.setItem(key, newValueStr);
+          }
+        } catch (parseError) {
+          // JSONパースエラー ＝ ただのテキスト（「その他」タブなどの文字列）
+          if (existingValueStr !== newValueStr && newValueStr.trim() !== "") {
+             const mergedText = existingValueStr + '\\n\\n-- 追加データ --\\n' + newValueStr;
+             localStorage.setItem(key, mergedText);
+          }
+        }
+        importedCount++;
+      }
+
+      alert('✅ データの取り込み（マージ）が完了しました！\\n設定を反映させるため、画面を再読み込みします。');
+      location.reload();
+    } catch (err) {
+      alert('エラー: ファイルの読み込みに失敗しました。\\n正しい形式のJSONファイルを選択してください。');
+      console.error(err);
+    }
+    // 同じファイルを連続で選べるようにリセット
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
 
 // ─── キャラクターデータ ───
 const CHARACTERS = [
