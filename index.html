@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SF6 メモアプリ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+    rel="stylesheet" />
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#e8001e" />
@@ -16,33 +19,40 @@
   <meta name="apple-mobile-web-app-title" content="Fight Note" />
   <style>
     /* ─── リセット & ベース ─── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg:        #0d0d14;
-      --surface:   #16161f;
-      --card:      #1c1c2a;
-      --border:    #2e2e45;
-      --accent:    #e8001e;
-      --accent2:   #ff6b00;
-      --gold:      #f5c518;
-      --text:      #e8e8f0;
-      --text-muted:#888;
-      --radius:    12px;
-      --transition:0.25s cubic-bezier(.4,0,.2,1);
+      --bg: #0d0d14;
+      --surface: #16161f;
+      --card: #1c1c2a;
+      --border: #2e2e45;
+      --accent: #e8001e;
+      --accent2: #ff6b00;
+      --gold: #f5c518;
+      --text: #e8e8f0;
+      --text-muted: #888;
+      --radius: 12px;
+      --transition: 0.25s cubic-bezier(.4, 0, .2, 1);
       --char-size: 85px;
     }
 
     body.light-theme {
-      --bg:        #f5f5f7;
-      --surface:   #ffffff;
-      --card:      #ffffff;
-      --border:    #e0e0e6;
-      --text:      #1c1c1e;
-      --text-muted:#8e8e93;
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --card: #ffffff;
+      --border: #e0e0e6;
+      --text: #1c1c1e;
+      --text-muted: #8e8e93;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       background: var(--bg);
       color: var(--text);
@@ -51,8 +61,16 @@
     }
 
     /* ─── スクリーン管理 ─── */
-    .screen { display: none; height: 100vh; flex-direction: column; overflow: hidden; }
-    .screen.active { display: flex; }
+    .screen {
+      display: none;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+    }
 
     /* ─── ヘッダー ─── */
     .header {
@@ -83,7 +101,10 @@
       transition: background var(--transition);
       line-height: 1;
     }
-    .header-back:hover { background: rgba(232,0,30,0.15); }
+
+    .header-back:hover {
+      background: rgba(232, 0, 30, 0.15);
+    }
 
     .header-title {
       font-family: 'Rajdhani', sans-serif;
@@ -97,13 +118,28 @@
       flex: 1;
     }
 
-    /* ─── キャラ一覧画面 ─── */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 5;
+      justify-content: center;
+    }
+
+    .logo-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--accent);
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px rgba(232, 0, 30, 0.2);
+    }
+
     .header-logo {
-      height: 80px;
+      height: 70px;
       width: auto;
       object-fit: contain;
       display: block;
-      margin: 0 auto;
     }
 
     #screen-list .header {
@@ -124,8 +160,10 @@
       align-items: center;
       z-index: 10;
     }
-    
-    .theme-toggle, .icon-btn, .help-btn {
+
+    .theme-toggle,
+    .icon-btn,
+    .help-btn {
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -136,11 +174,14 @@
       justify-content: center;
       cursor: pointer;
       font-size: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: all var(--transition);
       color: var(--text);
     }
-    .theme-toggle:hover, .icon-btn:hover, .help-btn:hover {
+
+    .theme-toggle:hover,
+    .icon-btn:hover,
+    .help-btn:hover {
       border-color: var(--accent);
       transform: scale(1.1);
     }
@@ -159,9 +200,20 @@
       font-size: 14px;
       color: var(--text);
     }
-    .about-content p { margin-bottom: 16px; }
-    .about-link { color: var(--accent); text-decoration: none; font-weight: 700; }
-    .about-link:hover { text-decoration: underline; }
+
+    .about-content p {
+      margin-bottom: 16px;
+    }
+
+    .about-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .about-link:hover {
+      text-decoration: underline;
+    }
 
     .list-subtitle {
       text-align: center;
@@ -179,12 +231,14 @@
       margin-top: 10px;
       flex-shrink: 0;
     }
+
     .size-slider-wrap label {
       font-size: 12px;
       color: var(--text-muted);
       font-weight: 700;
       white-space: nowrap;
     }
+
     .char-size-slider {
       flex: 1;
       -webkit-appearance: none;
@@ -194,6 +248,7 @@
       border-radius: 4px;
       outline: none;
     }
+
     .char-size-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -214,9 +269,19 @@
       padding: 14px 14px 80px;
       align-content: start;
     }
-    .char-grid::-webkit-scrollbar { width: 5px; }
-    .char-grid::-webkit-scrollbar-track { background: transparent; }
-    .char-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .char-grid::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .char-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .char-grid::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
 
     .char-card {
       background: var(--card);
@@ -230,12 +295,16 @@
       align-items: center;
       text-align: center;
     }
+
     .char-card:hover {
       transform: translateY(-4px) scale(1.03);
       border-color: var(--accent);
-      box-shadow: 0 8px 24px rgba(232,0,30,0.3);
+      box-shadow: 0 8px 24px rgba(232, 0, 30, 0.3);
     }
-    .char-card:active { transform: scale(0.97); }
+
+    .char-card:active {
+      transform: scale(0.97);
+    }
 
     .char-portrait {
       width: 100%;
@@ -248,11 +317,12 @@
       position: relative;
       overflow: hidden;
     }
+
     .char-portrait::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5));
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.5));
     }
 
     .char-name {
@@ -277,6 +347,7 @@
       flex-direction: column;
       padding: 0;
     }
+
     .detail-header-top {
       display: flex;
       align-items: center;
@@ -284,6 +355,7 @@
       padding: 12px 16px;
       width: 100%;
     }
+
     .char-detail-portrait {
       font-size: 38px;
       width: 52px;
@@ -296,24 +368,33 @@
       border: 1.5px solid var(--accent);
       flex-shrink: 0;
     }
+
     body.light-theme .char-detail-portrait,
     body.light-theme .cm-header-emoji,
     body.light-theme .char-portrait {
       background: linear-gradient(135deg, #eef2f5 0%, #ffffff 100%);
     }
+
     body.light-theme .char-portrait::after {
-      background: linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.5));
+      background: linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.5));
     }
+
     body.light-theme .char-card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
+
     .detail-char-name {
       font-family: 'Rajdhani', sans-serif;
       font-size: 20px;
       font-weight: 700;
       letter-spacing: 1px;
     }
-    .detail-char-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .detail-char-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
     /* ─── タブ（縦並び） ─── */
     .tabs-container {
@@ -324,9 +405,19 @@
       flex-direction: column;
       gap: 10px;
     }
-    .tabs-container::-webkit-scrollbar { width: 5px; }
-    .tabs-container::-webkit-scrollbar-track { background: transparent; }
-    .tabs-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .tabs-container::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .tabs-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .tabs-container::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
 
     .tab-section {
       background: var(--card);
@@ -335,7 +426,10 @@
       overflow: hidden;
       transition: border-color var(--transition);
     }
-    .tab-section.open { border-color: var(--accent); }
+
+    .tab-section.open {
+      border-color: var(--accent);
+    }
 
     .tab-header {
       display: flex;
@@ -347,7 +441,10 @@
       background: var(--surface);
       transition: background var(--transition);
     }
-    .tab-header:hover { background: rgba(232,0,30,0.08); }
+
+    .tab-header:hover {
+      background: rgba(232, 0, 30, 0.08);
+    }
 
     .tab-icon {
       font-size: 20px;
@@ -367,14 +464,21 @@
       font-size: 12px;
       transition: transform var(--transition);
     }
-    .tab-section.open .tab-arrow { transform: rotate(180deg); color: var(--accent); }
+
+    .tab-section.open .tab-arrow {
+      transform: rotate(180deg);
+      color: var(--accent);
+    }
 
     .tab-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.35s cubic-bezier(.4,0,.2,1), padding 0.2s;
+      transition: max-height 0.35s cubic-bezier(.4, 0, .2, 1), padding 0.2s;
     }
-    .tab-section.open .tab-content { max-height: 1000px; }
+
+    .tab-section.open .tab-content {
+      max-height: 1000px;
+    }
 
     .tab-content-inner {
       padding: 12px 14px 14px;
@@ -396,8 +500,14 @@
       outline: none;
       transition: border-color var(--transition);
     }
-    textarea:focus { border-color: var(--accent); }
-    textarea::placeholder { color: var(--text-muted); }
+
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea::placeholder {
+      color: var(--text-muted);
+    }
 
     .save-btn {
       margin-top: 8px;
@@ -415,15 +525,25 @@
       transition: opacity var(--transition), transform var(--transition);
       font-family: 'Noto Sans JP', sans-serif;
     }
-    .save-btn:hover { opacity: 0.88; }
-    .save-btn:active { transform: scale(0.96); }
-    .save-btn.saved { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+    .save-btn:hover {
+      opacity: 0.88;
+    }
+
+    .save-btn:active {
+      transform: scale(0.96);
+    }
+
+    .save-btn.saved {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+    }
 
     /* ─── 検索バー ─── */
     .search-wrap {
       padding: 0 14px 10px;
       flex-shrink: 0;
     }
+
     .search-input {
       width: 100%;
       background: var(--card);
@@ -436,8 +556,14 @@
       outline: none;
       transition: border-color var(--transition);
     }
-    .search-input:focus { border-color: var(--accent); }
-    .search-input::placeholder { color: var(--text-muted); }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
 
     /* ─── ロゴ装飾 ─── */
     .logo-wrap {
@@ -445,6 +571,7 @@
       align-items: center;
       gap: 8px;
     }
+
     .logo-badge {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff;
@@ -458,21 +585,48 @@
 
     /* ─── アニメーション ─── */
     @keyframes slideIn {
-      from { opacity: 0; transform: translateX(30px); }
-      to   { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
+
     @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-30px); }
-      to   { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
-    #screen-detail.active { animation: slideIn 0.25s ease; }
-    #screen-list.active { animation: slideInLeft 0.2s ease; }
+
+    #screen-detail.active {
+      animation: slideIn 0.25s ease;
+    }
+
+    #screen-list.active {
+      animation: slideInLeft 0.2s ease;
+    }
 
     /* ══════════════════════════════════════════════════════════════════════
        専用カード追加画面 (キャラ対策 / コンボ) 共通クラス
        ══════════════════════════════════════════════════════════════════════ */
-    .cm-layout { flex-direction: row !important; }
-    #screen-countermeasure.active, #screen-combo.active { animation: slideIn 0.25s ease; }
+    .cm-layout {
+      flex-direction: row !important;
+    }
+
+    #screen-countermeasure.active,
+    #screen-combo.active {
+      animation: slideIn 0.25s ease;
+    }
 
     /* ─── 左サイドバー（キャラ選択） ※キャラ対策のみ ─── */
     .cm-sidebar {
@@ -484,6 +638,7 @@
       flex-direction: column;
       overflow: hidden;
     }
+
     .cm-sidebar-header {
       padding: 10px 0 6px;
       text-align: center;
@@ -494,13 +649,21 @@
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
+
     .cm-sidebar-list {
       flex: 1;
       overflow-y: auto;
       padding: 6px 0 80px;
     }
-    .cm-sidebar-list::-webkit-scrollbar { width: 3px; }
-    .cm-sidebar-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .cm-sidebar-list::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .cm-sidebar-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
 
     .cm-sidebar-item {
       display: flex;
@@ -511,12 +674,20 @@
       transition: background var(--transition);
       border-left: 3px solid transparent;
     }
-    .cm-sidebar-item:hover { background: rgba(232,0,30,0.06); }
+
+    .cm-sidebar-item:hover {
+      background: rgba(232, 0, 30, 0.06);
+    }
+
     .cm-sidebar-item.active {
-      background: rgba(232,0,30,0.12);
+      background: rgba(232, 0, 30, 0.12);
       border-left-color: var(--accent);
     }
-    .cm-sidebar-item .sb-emoji { font-size: 24px; }
+
+    .cm-sidebar-item .sb-emoji {
+      font-size: 24px;
+    }
+
     .cm-sidebar-item .sb-name {
       font-size: 9px;
       margin-top: 3px;
@@ -528,7 +699,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .cm-sidebar-item.active .sb-name { color: var(--text); }
+
+    .cm-sidebar-item.active .sb-name {
+      color: var(--text);
+    }
 
     /* ─── メイン領域 ─── */
     .cm-main {
@@ -548,12 +722,14 @@
       border-bottom: 2px solid var(--accent);
       flex-shrink: 0;
     }
+
     .cm-header-info {
       flex: 1;
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .cm-header-emoji {
       font-size: 28px;
       width: 42px;
@@ -565,12 +741,14 @@
       border-radius: 8px;
       border: 1.5px solid var(--accent);
     }
+
     .cm-header-name {
       font-family: 'Rajdhani', sans-serif;
       font-size: 18px;
       font-weight: 700;
       letter-spacing: 1px;
     }
+
     .cm-header-label {
       font-size: 11px;
       color: var(--text-muted);
@@ -583,7 +761,9 @@
       padding: 12px 16px 4px 16px;
       background: var(--bg);
     }
-    .cm-search-input, .cm-tag-filter {
+
+    .cm-search-input,
+    .cm-tag-filter {
       background: var(--surface);
       border: 1.5px solid var(--border);
       color: var(--text);
@@ -594,8 +774,15 @@
       outline: none;
       transition: border-color var(--transition);
     }
-    .cm-search-input { flex: 1; }
-    .cm-search-input:focus, .cm-tag-filter:focus { border-color: var(--accent); }
+
+    .cm-search-input {
+      flex: 1;
+    }
+
+    .cm-search-input:focus,
+    .cm-tag-filter:focus {
+      border-color: var(--accent);
+    }
 
     /* ─── メモカード一覧 ─── */
     .cm-cards {
@@ -606,8 +793,15 @@
       flex-direction: column;
       gap: 12px;
     }
-    .cm-cards::-webkit-scrollbar { width: 5px; }
-    .cm-cards::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .cm-cards::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .cm-cards::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
 
     .cm-card {
       background: var(--card);
@@ -616,7 +810,10 @@
       overflow: hidden;
       transition: border-color var(--transition);
     }
-    .cm-card:hover { border-color: #444; }
+
+    .cm-card:hover {
+      border-color: #444;
+    }
 
     .cm-card-top {
       display: flex;
@@ -626,12 +823,14 @@
       background: var(--surface);
       border-bottom: 1px solid var(--border);
     }
+
     .cm-card-title {
       flex: 1;
       font-size: 14px;
       font-weight: 700;
       color: var(--text);
     }
+
     .cm-card-delete {
       background: none;
       border: none;
@@ -642,7 +841,11 @@
       border-radius: 4px;
       transition: color var(--transition), background var(--transition);
     }
-    .cm-card-delete:hover { color: #ff4444; background: rgba(255,68,68,0.1); }
+
+    .cm-card-delete:hover {
+      color: #ff4444;
+      background: rgba(255, 68, 68, 0.1);
+    }
 
     .cm-card-tags {
       display: flex;
@@ -650,6 +853,7 @@
       gap: 5px;
       padding: 8px 14px 0;
     }
+
     .cm-tag {
       font-size: 10px;
       font-weight: 700;
@@ -657,26 +861,88 @@
       border-radius: 20px;
       letter-spacing: 0.5px;
     }
-    .cm-tag-important  { background: rgba(232,0,30,0.2);  color: #ff6666; }
-    .cm-tag-low        { background: rgba(100,149,237,0.2); color: #6495ed; }
-    .cm-tag-hard       { background: rgba(255,165,0,0.2);  color: #ffb347; }
-    .cm-tag-easy       { background: rgba(46,204,113,0.2); color: #5dde8f; }
-    .cm-tag-stare      { background: rgba(155,89,182,0.2); color: #d7bde2; }
+
+    .cm-tag-important {
+      background: rgba(232, 0, 30, 0.2);
+      color: #ff6666;
+    }
+
+    .cm-tag-low {
+      background: rgba(100, 149, 237, 0.2);
+      color: #6495ed;
+    }
+
+    .cm-tag-hard {
+      background: rgba(255, 165, 0, 0.2);
+      color: #ffb347;
+    }
+
+    .cm-tag-easy {
+      background: rgba(46, 204, 113, 0.2);
+      color: #5dde8f;
+    }
+
+    .cm-tag-stare {
+      background: rgba(155, 89, 182, 0.2);
+      color: #d7bde2;
+    }
 
     /* コンボ用タグ色 */
-    .cm-tag-char-only  { background: rgba(155,89,182,0.2); color: #bb8fce; }
-    .cm-tag-sa1        { background: rgba(241,196,15,0.2); color: #f4d03f; }
-    .cm-tag-sa2        { background: rgba(230,126,34,0.2); color: #eb984e; }
-    .cm-tag-sa3        { background: rgba(231,76,60,0.2);  color: #ec7063; }
-    .cm-tag-allin      { background: rgba(52,152,219,0.2); color: #5dade2; }
-    .cm-tag-position   { background: rgba(46,204,113,0.2); color: #5dde8f; }
+    .cm-tag-char-only {
+      background: rgba(155, 89, 182, 0.2);
+      color: #bb8fce;
+    }
+
+    .cm-tag-sa1 {
+      background: rgba(241, 196, 15, 0.2);
+      color: #f4d03f;
+    }
+
+    .cm-tag-sa2 {
+      background: rgba(230, 126, 34, 0.2);
+      color: #eb984e;
+    }
+
+    .cm-tag-sa3 {
+      background: rgba(231, 76, 60, 0.2);
+      color: #ec7063;
+    }
+
+    .cm-tag-allin {
+      background: rgba(52, 152, 219, 0.2);
+      color: #5dade2;
+    }
+
+    .cm-tag-position {
+      background: rgba(46, 204, 113, 0.2);
+      color: #5dde8f;
+    }
 
     /* 立ち回り用タグ色 */
-    .cm-tag-neu-all    { background: rgba(52,152,219,0.2); color: #5dade2; }
-    .cm-tag-neu-sit    { background: rgba(155,89,182,0.2); color: #d7bde2; }
-    .cm-tag-neu-growth { background: rgba(46,204,113,0.2); color: #5dde8f; }
-    .cm-tag-neu-test   { background: rgba(241,196,15,0.2); color: #f4d03f; }
-    .cm-tag-neu-pend   { background: rgba(149,165,166,0.2); color: #bdc3c7; }
+    .cm-tag-neu-all {
+      background: rgba(52, 152, 219, 0.2);
+      color: #5dade2;
+    }
+
+    .cm-tag-neu-sit {
+      background: rgba(155, 89, 182, 0.2);
+      color: #d7bde2;
+    }
+
+    .cm-tag-neu-growth {
+      background: rgba(46, 204, 113, 0.2);
+      color: #5dde8f;
+    }
+
+    .cm-tag-neu-test {
+      background: rgba(241, 196, 15, 0.2);
+      color: #f4d03f;
+    }
+
+    .cm-tag-neu-pend {
+      background: rgba(149, 165, 166, 0.2);
+      color: #bdc3c7;
+    }
 
     .cm-card-body {
       padding: 10px 14px 14px;
@@ -693,7 +959,11 @@
       padding: 60px 20px;
       font-size: 14px;
     }
-    .cm-empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+    .cm-empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
 
     /* ─── 追加ボタン（フローティング） ─── */
     .cm-add-btn {
@@ -708,28 +978,38 @@
       border: none;
       font-size: 28px;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(232,0,30,0.5);
+      box-shadow: 0 6px 20px rgba(232, 0, 30, 0.5);
       transition: transform var(--transition), box-shadow var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 10;
     }
-    .cm-add-btn:hover { transform: scale(1.1); box-shadow: 0 8px 28px rgba(232,0,30,0.6); }
-    .cm-add-btn:active { transform: scale(0.95); }
+
+    .cm-add-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 28px rgba(232, 0, 30, 0.6);
+    }
+
+    .cm-add-btn:active {
+      transform: scale(0.95);
+    }
 
     /* ─── メモ追加/編集モーダル ─── */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 100;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    .modal-overlay.active { display: flex; }
+
+    .modal-overlay.active {
+      display: flex;
+    }
 
     .modal {
       background: var(--surface);
@@ -741,9 +1021,17 @@
       overflow-y: auto;
       animation: modalIn 0.2s ease;
     }
+
     @keyframes modalIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.95); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .modal-header {
@@ -753,11 +1041,13 @@
       padding: 16px 18px;
       border-bottom: 1px solid var(--border);
     }
+
     .modal-header-title {
       flex: 1;
       font-size: 16px;
       font-weight: 700;
     }
+
     .modal-close {
       background: none;
       border: none;
@@ -768,11 +1058,20 @@
       border-radius: 6px;
       transition: color var(--transition), background var(--transition);
     }
-    .modal-close:hover { color: #ff4444; background: rgba(255,68,68,0.1); }
 
-    .modal-body { padding: 16px 18px; }
+    .modal-close:hover {
+      color: #ff4444;
+      background: rgba(255, 68, 68, 0.1);
+    }
 
-    .modal-field { margin-bottom: 14px; }
+    .modal-body {
+      padding: 16px 18px;
+    }
+
+    .modal-field {
+      margin-bottom: 14px;
+    }
+
     .modal-field label {
       display: block;
       font-size: 12px;
@@ -781,6 +1080,7 @@
       margin-bottom: 6px;
       letter-spacing: 0.5px;
     }
+
     .modal-field input[type="text"] {
       width: 100%;
       background: var(--bg);
@@ -793,8 +1093,14 @@
       outline: none;
       transition: border-color var(--transition);
     }
-    .modal-field input[type="text"]:focus { border-color: var(--accent); }
-    .modal-field input[type="text"]::placeholder { color: var(--text-muted); }
+
+    .modal-field input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-field input[type="text"]::placeholder {
+      color: var(--text-muted);
+    }
 
     .modal-field textarea {
       min-height: 120px;
@@ -806,6 +1112,7 @@
       flex-wrap: wrap;
       gap: 8px;
     }
+
     .tag-option {
       display: flex;
       align-items: center;
@@ -820,28 +1127,114 @@
       transition: all var(--transition);
       user-select: none;
     }
-    .tag-option:hover { border-color: #555; }
-    .tag-option.selected { border-color: var(--accent); }
-    .tag-option.selected[data-tag="important"] { background: rgba(232,0,30,0.15); color: #ff6666; border-color: #ff6666; }
-    .tag-option.selected[data-tag="low"]       { background: rgba(100,149,237,0.15); color: #6495ed; border-color: #6495ed; }
-    .tag-option.selected[data-tag="hard"]      { background: rgba(255,165,0,0.15); color: #ffb347; border-color: #ffb347; }
-    .tag-option.selected[data-tag="easy"]      { background: rgba(46,204,113,0.15); color: #5dde8f; border-color: #5dde8f; }
-    .tag-option.selected[data-tag="stare"]     { background: rgba(155,89,182,0.15); color: #d7bde2; border-color: #d7bde2; }
-    
-    .tag-option.selected[data-tag="char-only"] { background: rgba(155,89,182,0.15); color: #bb8fce; border-color: #bb8fce; }
-    .tag-option.selected[data-tag="sa1"]       { background: rgba(241,196,15,0.15); color: #f4d03f; border-color: #f4d03f; }
-    .tag-option.selected[data-tag="sa2"]       { background: rgba(230,126,34,0.15); color: #eb984e; border-color: #eb984e; }
-    .tag-option.selected[data-tag="sa3"]       { background: rgba(231,76,60,0.15);  color: #ec7063; border-color: #ec7063; }
-    .tag-option.selected[data-tag="allin"]     { background: rgba(52,152,219,0.15); color: #5dade2; border-color: #5dade2; }
-    .tag-option.selected[data-tag="pos"]       { background: rgba(46,204,113,0.15); color: #5dde8f; border-color: #5dde8f; }
 
-    .tag-option.selected[data-tag="neu-all"]   { background: rgba(52,152,219,0.15); color: #5dade2; border-color: #5dade2; }
-    .tag-option.selected[data-tag="neu-sit"]   { background: rgba(155,89,182,0.15); color: #d7bde2; border-color: #d7bde2; }
-    .tag-option.selected[data-tag="neu-growth"]{ background: rgba(46,204,113,0.15); color: #5dde8f; border-color: #5dde8f; }
-    .tag-option.selected[data-tag="neu-test"]  { background: rgba(241,196,15,0.15); color: #f4d03f; border-color: #f4d03f; }
-    .tag-option.selected[data-tag="neu-pend"]  { background: rgba(149,165,166,0.15); color: #bdc3c7; border-color: #bdc3c7; }
+    .tag-option:hover {
+      border-color: #555;
+    }
 
-    .tag-option .tag-check { font-size: 10px; }
+    .tag-option.selected {
+      border-color: var(--accent);
+    }
+
+    .tag-option.selected[data-tag="important"] {
+      background: rgba(232, 0, 30, 0.15);
+      color: #ff6666;
+      border-color: #ff6666;
+    }
+
+    .tag-option.selected[data-tag="low"] {
+      background: rgba(100, 149, 237, 0.15);
+      color: #6495ed;
+      border-color: #6495ed;
+    }
+
+    .tag-option.selected[data-tag="hard"] {
+      background: rgba(255, 165, 0, 0.15);
+      color: #ffb347;
+      border-color: #ffb347;
+    }
+
+    .tag-option.selected[data-tag="easy"] {
+      background: rgba(46, 204, 113, 0.15);
+      color: #5dde8f;
+      border-color: #5dde8f;
+    }
+
+    .tag-option.selected[data-tag="stare"] {
+      background: rgba(155, 89, 182, 0.15);
+      color: #d7bde2;
+      border-color: #d7bde2;
+    }
+
+    .tag-option.selected[data-tag="char-only"] {
+      background: rgba(155, 89, 182, 0.15);
+      color: #bb8fce;
+      border-color: #bb8fce;
+    }
+
+    .tag-option.selected[data-tag="sa1"] {
+      background: rgba(241, 196, 15, 0.15);
+      color: #f4d03f;
+      border-color: #f4d03f;
+    }
+
+    .tag-option.selected[data-tag="sa2"] {
+      background: rgba(230, 126, 34, 0.15);
+      color: #eb984e;
+      border-color: #eb984e;
+    }
+
+    .tag-option.selected[data-tag="sa3"] {
+      background: rgba(231, 76, 60, 0.15);
+      color: #ec7063;
+      border-color: #ec7063;
+    }
+
+    .tag-option.selected[data-tag="allin"] {
+      background: rgba(52, 152, 219, 0.15);
+      color: #5dade2;
+      border-color: #5dade2;
+    }
+
+    .tag-option.selected[data-tag="pos"] {
+      background: rgba(46, 204, 113, 0.15);
+      color: #5dde8f;
+      border-color: #5dde8f;
+    }
+
+    .tag-option.selected[data-tag="neu-all"] {
+      background: rgba(52, 152, 219, 0.15);
+      color: #5dade2;
+      border-color: #5dade2;
+    }
+
+    .tag-option.selected[data-tag="neu-sit"] {
+      background: rgba(155, 89, 182, 0.15);
+      color: #d7bde2;
+      border-color: #d7bde2;
+    }
+
+    .tag-option.selected[data-tag="neu-growth"] {
+      background: rgba(46, 204, 113, 0.15);
+      color: #5dde8f;
+      border-color: #5dde8f;
+    }
+
+    .tag-option.selected[data-tag="neu-test"] {
+      background: rgba(241, 196, 15, 0.15);
+      color: #f4d03f;
+      border-color: #f4d03f;
+    }
+
+    .tag-option.selected[data-tag="neu-pend"] {
+      background: rgba(149, 165, 166, 0.15);
+      color: #bdc3c7;
+      border-color: #bdc3c7;
+    }
+
+    .tag-option .tag-check {
+      font-size: 10px;
+    }
 
     .modal-footer {
       display: flex;
@@ -850,6 +1243,7 @@
       padding: 12px 18px;
       border-top: 1px solid var(--border);
     }
+
     .modal-btn {
       padding: 8px 20px;
       border-radius: 8px;
@@ -860,18 +1254,29 @@
       font-family: 'Noto Sans JP', sans-serif;
       transition: opacity var(--transition), transform var(--transition);
     }
-    .modal-btn:active { transform: scale(0.96); }
+
+    .modal-btn:active {
+      transform: scale(0.96);
+    }
+
     .modal-btn-cancel {
       background: var(--card);
       color: var(--text-muted);
       border: 1px solid var(--border);
     }
-    .modal-btn-cancel:hover { color: var(--text); }
+
+    .modal-btn-cancel:hover {
+      color: var(--text);
+    }
+
     .modal-btn-save {
       background: linear-gradient(135deg, var(--accent), #c0001a);
       color: #fff;
     }
-    .modal-btn-save:hover { opacity: 0.88; }
+
+    .modal-btn-save:hover {
+      opacity: 0.88;
+    }
 
     /* ─── コンボチェーンビルダー ─── */
     .combo-chain-builder {
@@ -885,7 +1290,10 @@
       border-radius: 8px;
       min-height: 60px;
     }
-    .combo-chain-builder:focus-within { border-color: var(--accent); }
+
+    .combo-chain-builder:focus-within {
+      border-color: var(--accent);
+    }
 
     .combo-part {
       display: inline-flex;
@@ -906,17 +1314,25 @@
       text-align: center;
       justify-content: center;
     }
-    .combo-part:hover { border-color: #555; }
+
+    .combo-part:hover {
+      border-color: #555;
+    }
+
     .combo-part.active {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(232,0,30,0.2);
+      box-shadow: 0 0 0 2px rgba(232, 0, 30, 0.2);
     }
+
     .combo-part.empty {
       color: var(--text-muted);
       font-size: 11px;
       border-style: dashed;
     }
-    .combo-part.filled { border-color: #444; }
+
+    .combo-part.filled {
+      border-color: #444;
+    }
 
     .combo-part-input {
       background: transparent;
@@ -930,7 +1346,11 @@
       min-width: 40px;
       text-align: center;
     }
-    .combo-part-input::placeholder { color: var(--text-muted); font-size: 11px; }
+
+    .combo-part-input::placeholder {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
 
     .combo-arrow {
       color: var(--accent);
@@ -948,10 +1368,12 @@
       position: relative;
       padding: 0 4px;
     }
+
     .combo-arrow-wrapper:hover .combo-arrow {
       color: #ff8a80;
       transform: scale(1.2);
     }
+
     .combo-arrow-label {
       font-size: 9px;
       margin-bottom: -4px;
@@ -963,12 +1385,20 @@
       justify-content: center;
       padding: 0 2px;
     }
-    .label-rush  { color: #adff2f; } /* 黄緑 */
-    .label-walk  { color: var(--accent2); }
-    .label-frame { 
-      color: #000; 
-      background: #eee; 
-      border-radius: 2px; 
+
+    .label-rush {
+      color: #adff2f;
+    }
+
+    /* 黄緑 */
+    .label-walk {
+      color: var(--accent2);
+    }
+
+    .label-frame {
+      color: #000;
+      background: #eee;
+      border-radius: 2px;
       padding: 0 3px;
       line-height: 1;
       height: 11px;
@@ -981,14 +1411,18 @@
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       z-index: 200;
       display: none;
       flex-direction: column;
       overflow: hidden;
       min-width: 140px;
     }
-    .arrow-popup.active { display: flex; }
+
+    .arrow-popup.active {
+      display: flex;
+    }
+
     .arrow-popup-item {
       padding: 10px 14px;
       font-size: 13px;
@@ -998,8 +1432,14 @@
       border-bottom: 1px solid var(--border);
       transition: background 0.2s;
     }
-    .arrow-popup-item:last-child { border-bottom: none; }
-    .arrow-popup-item:hover { background: rgba(232,0,30,0.1); }
+
+    .arrow-popup-item:last-child {
+      border-bottom: none;
+    }
+
+    .arrow-popup-item:hover {
+      background: rgba(232, 0, 30, 0.1);
+    }
 
     .combo-part-delete {
       position: absolute;
@@ -1018,8 +1458,14 @@
       justify-content: center;
       line-height: 1;
     }
-    .combo-part:hover .combo-part-delete { display: flex; }
-    .combo-part-delete:hover { background: #ff4444; }
+
+    .combo-part:hover .combo-part-delete {
+      display: flex;
+    }
+
+    .combo-part-delete:hover {
+      background: #ff4444;
+    }
 
     /* ─── コンボチェーン表示（カード内） ─── */
     .combo-chain-display {
@@ -1029,6 +1475,7 @@
       gap: 6px;
       padding: 10px 14px 14px;
     }
+
     .combo-chain-part {
       display: inline-flex;
       align-items: center;
@@ -1040,6 +1487,7 @@
       font-weight: 500;
       color: var(--text);
     }
+
     .combo-chain-arrow {
       color: var(--accent);
       font-size: 14px;
@@ -1047,527 +1495,538 @@
     }
   </style>
 </head>
+
 <body>
 
-<!-- ════════════════════════════ キャラ一覧画面 ════════════════════════════ -->
-<div id="screen-list" class="screen active">
-  <div class="header">
-    <button class="help-btn" onclick="openAboutModal()" title="アプリについて">？</button>
-    <img src="assets/logo.png" alt="Fight Note" class="header-logo">
-    <div class="header-actions">
-      <button class="icon-btn" onclick="exportData()" title="データを書き出し（バックアップ）">📤</button>
-      <label class="icon-btn" title="データをマージして取り込み">
-        📥<input type="file" accept=".json" style="display:none;" onchange="importData(event)">
-      </label>
-      <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">🌙</div>
-    </div>
-  </div>
-  <div class="list-subtitle">キャラを選んでメモを記録しよう ⚡</div>
-  <div class="search-wrap" style="margin-top:10px;">
-    <input class="search-input" id="search-input" type="text" placeholder="🔍 キャラを検索…" oninput="filterChars()" />
-  </div>
-  <div class="size-slider-wrap">
-    <label for="char-size-slider">⚙️ アイコンサイズ</label>
-    <input type="range" class="char-size-slider" id="char-size-slider" min="60" max="150" step="5" value="85" oninput="updateCharSize()">
-  </div>
-  <div class="char-grid" id="char-grid"></div>
-</div>
-
-<!-- ════════════════════════════ キャラ詳細画面 ════════════════════════════ -->
-<div id="screen-detail" class="screen">
-  <div class="header detail-header">
-    <div class="detail-header-top">
-      <button class="header-back" onclick="goBack()">&#8592;</button>
-      <div class="char-detail-portrait" id="detail-portrait"></div>
-      <div class="detail-char-info">
-        <div class="detail-char-name" id="detail-name"></div>
-        <div class="detail-char-sub">メモを記録しよう</div>
+  <!-- ════════════════════════════ キャラ一覧画面 ════════════════════════════ -->
+  <div id="screen-list" class="screen active">
+    <div class="header">
+      <button class="help-btn" onclick="openAboutModal()" title="アプリについて">？</button>
+      <div class="logo-container">
+        <span class="logo-text">ストメモ</span>
+        <img src="assets/logo.png" alt="Fight Note" class="header-logo">
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="exportData()" title="データを書き出し（バックアップ）">📤</button>
+        <label class="icon-btn" title="データをマージして取り込み">
+          📥<input type="file" accept=".json" style="display:none;" onchange="importData(event)">
+        </label>
+        <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">🌙</div>
       </div>
     </div>
+    <div class="list-subtitle">キャラを選んでメモを記録しよう ⚡</div>
+    <div class="search-wrap" style="margin-top:10px;">
+      <input class="search-input" id="search-input" type="text" placeholder="🔍 キャラを検索…" oninput="filterChars()" />
+    </div>
+    <div class="size-slider-wrap">
+      <label for="char-size-slider">⚙️ アイコンサイズ</label>
+      <input type="range" class="char-size-slider" id="char-size-slider" min="60" max="150" step="5" value="85"
+        oninput="updateCharSize()">
+    </div>
+    <div class="char-grid" id="char-grid"></div>
   </div>
-  <div class="tabs-container" id="tabs-container"></div>
-</div>
 
-<!-- ════════════════════════════ キャラ対策専用画面 ════════════════════════════ -->
-<div id="screen-countermeasure" class="screen cm-layout">
-  <!-- 左サイドバー -->
-  <div class="cm-sidebar">
-    <div class="cm-sidebar-header">VS</div>
-    <div class="cm-sidebar-list" id="cm-sidebar-list"></div>
-  </div>
-  <!-- メインコンテンツ -->
-  <div class="cm-main">
-    <div class="cm-header">
-      <button class="header-back" onclick="goBackFromCM()">&#8592;</button>
-      <div class="cm-header-info">
-        <div class="cm-header-emoji" id="cm-header-emoji"></div>
-        <div>
-          <div class="cm-header-name" id="cm-header-name"></div>
-          <div class="cm-header-label">🛡️ キャラ対策メモ</div>
+  <!-- ════════════════════════════ キャラ詳細画面 ════════════════════════════ -->
+  <div id="screen-detail" class="screen">
+    <div class="header detail-header">
+      <div class="detail-header-top">
+        <button class="header-back" onclick="goBack()">&#8592;</button>
+        <div class="char-detail-portrait" id="detail-portrait"></div>
+        <div class="detail-char-info">
+          <div class="detail-char-name" id="detail-name"></div>
+          <div class="detail-char-sub">メモを記録しよう</div>
         </div>
       </div>
     </div>
-    <div class="cm-filter-bar">
-      <input type="text" class="cm-search-input" id="cm-search" placeholder="🔍 メモを検索..." oninput="updateFilteredCards()">
-      <select class="cm-tag-filter" id="cm-filter-tag" onchange="updateFilteredCards()">
-        <option value="">🏷️ すべてのタグ</option>
-      </select>
-    </div>
-    <div class="cm-cards" id="cm-cards"></div>
-    <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
+    <div class="tabs-container" id="tabs-container"></div>
   </div>
-</div>
 
-<!-- ════════════════════════════ コンボ専用画面 ════════════════════════════ -->
-<div id="screen-combo" class="screen">
-  <div class="cm-main">
-    <div class="cm-header">
-      <button class="header-back" onclick="goBackFromCombo()">&#8592;</button>
-      <div class="cm-header-info">
-        <div class="cm-header-emoji" id="combo-header-emoji"></div>
-        <div>
-          <div class="cm-header-name" id="combo-header-name"></div>
-          <div class="cm-header-label">⚔️ コンボメモ</div>
-        </div>
-      </div>
+  <!-- ════════════════════════════ キャラ対策専用画面 ════════════════════════════ -->
+  <div id="screen-countermeasure" class="screen cm-layout">
+    <!-- 左サイドバー -->
+    <div class="cm-sidebar">
+      <div class="cm-sidebar-header">VS</div>
+      <div class="cm-sidebar-list" id="cm-sidebar-list"></div>
     </div>
-    <div class="cm-filter-bar">
-      <input type="text" class="cm-search-input" id="combo-search" placeholder="🔍 メモを検索..." oninput="updateFilteredCards()">
-      <select class="cm-tag-filter" id="combo-filter-tag" onchange="updateFilteredCards()">
-        <option value="">🏷️ すべてのタグ</option>
-      </select>
-    </div>
-    <div class="cm-cards" id="combo-cards"></div>
-    <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
-  </div>
-</div>
-
-<!-- ════════════════════════════ 立ち回り専用画面 ════════════════════════════ -->
-<div id="screen-neutral" class="screen">
-  <div class="cm-main">
-    <div class="cm-header">
-      <button class="header-back" onclick="goBackFromNeutral()">&#8592;</button>
-      <div class="cm-header-info">
-        <div class="cm-header-emoji" id="neutral-header-emoji"></div>
-        <div>
-          <div class="cm-header-name" id="neutral-header-name"></div>
-          <div class="cm-header-label">🎯 立ち回りメモ</div>
-        </div>
-      </div>
-    </div>
-    <div class="cm-filter-bar">
-      <input type="text" class="cm-search-input" id="neutral-search" placeholder="🔍 メモを検索..." oninput="updateFilteredCards()">
-      <select class="cm-tag-filter" id="neutral-filter-tag" onchange="updateFilteredCards()">
-        <option value="">🏷️ すべてのタグ</option>
-      </select>
-    </div>
-    <div class="cm-cards" id="neutral-cards"></div>
-    <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
-  </div>
-</div>
-
-<!-- ════════════════════════════ メモ追加/編集モーダル ════════════════════════════ -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeMemoModal(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header">
-      <span class="modal-header-title" id="modal-title">📝 メモを追加</span>
-      <button class="modal-close" onclick="closeMemoModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-field">
-        <label>タイトル</label>
-        <input type="text" id="memo-input-title" placeholder="（例：対空が強い、起き攻めに注意…）" />
-      </div>
-      <div class="modal-field">
-        <label>タグ（複数選択可）</label>
-        <div class="tag-options" id="tag-options">
-          <div class="tag-option" data-tag="important" onclick="toggleTagOption(this)">
-            <span class="tag-check">○</span> 🔴 重要
-          </div>
-          <div class="tag-option" data-tag="low" onclick="toggleTagOption(this)">
-            <span class="tag-check">○</span> 🔵 優先度低め
-          </div>
-          <div class="tag-option" data-tag="hard" onclick="toggleTagOption(this)">
-            <span class="tag-check">○</span> 🟠 難しい
-          </div>
-          <div class="tag-option" data-tag="easy" onclick="toggleTagOption(this)">
-            <span class="tag-check">○</span> 🟢 簡単
+    <!-- メインコンテンツ -->
+    <div class="cm-main">
+      <div class="cm-header">
+        <button class="header-back" onclick="goBackFromCM()">&#8592;</button>
+        <div class="cm-header-info">
+          <div class="cm-header-emoji" id="cm-header-emoji"></div>
+          <div>
+            <div class="cm-header-name" id="cm-header-name"></div>
+            <div class="cm-header-label">🛡️ キャラ対策メモ</div>
           </div>
         </div>
       </div>
-      <div class="modal-field" id="modal-field-content">
-        <label>内容</label>
-        <textarea id="memo-input-content" placeholder="メモの詳細を入力…"></textarea>
+      <div class="cm-filter-bar">
+        <input type="text" class="cm-search-input" id="cm-search" placeholder="🔍 メモを検索..."
+          oninput="updateFilteredCards()">
+        <select class="cm-tag-filter" id="cm-filter-tag" onchange="updateFilteredCards()">
+          <option value="">🏷️ すべてのタグ</option>
+        </select>
       </div>
-      <div class="modal-field" id="modal-field-combo" style="display:none;">
-        <label>コンボ内容（パーツをタップして入力）</label>
-        <div class="combo-chain-builder" id="combo-chain-builder"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-btn modal-btn-cancel" onclick="closeMemoModal()">キャンセル</button>
-      <button class="modal-btn modal-btn-save" onclick="saveMemoCard()">💾 保存</button>
+      <div class="cm-cards" id="cm-cards"></div>
+      <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
     </div>
   </div>
-</div>
 
-<!-- 矢印編集メニュー -->
-<div id="arrow-popup" class="arrow-popup">
-  <div class="arrow-popup-item" onclick="setArrowLink('rush')">💨 キャンセルラッシュ</div>
-  <div class="arrow-popup-item" onclick="setArrowLink('walk')">👣 微歩き</div>
-  <div class="arrow-popup-item" onclick="setArrowLink('frame')">⏱️ フレーム数...</div>
-  <div class="arrow-popup-item" onclick="setArrowLink(null)" style="color: #ff4444;">❌ 通常の矢印に戻す</div>
-</div>
-
-<!-- ─── ヘルプモーダル ─── -->
-<div class="modal-overlay" id="about-overlay" onclick="closeAboutModal(event)">
-  <div class="modal" id="about-modal">
-    <div class="modal-header">
-      <h2 class="modal-title">📖 アプリについて</h2>
-      <button class="close-btn" onclick="closeAboutModal()">×</button>
-    </div>
-    <div class="modal-body about-content">
-      <p>このアプリは現在Beta版です。バグや不具合、改善の要望などがあればぜひ開発者のX (Twitter) <a href="https://x.com/letmeshee" target="_blank" class="about-link">@letmeshee</a> のDMまでお願いします。</p>
-      <p><strong>📱 スマホアプリとして使う場合</strong><br>ブラウザの「共有」メニューから「ホーム画面に追加」を選ぶことで、スマホアプリと同じように起動して使えるようになります。</p>
-      <p><strong>☁️ データの共有とバックアップ</strong><br>画面右上のアイコンから、攻略内容をファイル（JSON）としてエクスポートしたり、インポートしたりできます。友達とデータを共有したり、自分用のバックアップとして活用いただけます。</p>
-    </div>
-    <div class="modal-footer">
-      <button class="save-btn" style="width:100%; justify-content:center;" onclick="closeAboutModal()">とじる</button>
+  <!-- ════════════════════════════ コンボ専用画面 ════════════════════════════ -->
+  <div id="screen-combo" class="screen">
+    <div class="cm-main">
+      <div class="cm-header">
+        <button class="header-back" onclick="goBackFromCombo()">&#8592;</button>
+        <div class="cm-header-info">
+          <div class="cm-header-emoji" id="combo-header-emoji"></div>
+          <div>
+            <div class="cm-header-name" id="combo-header-name"></div>
+            <div class="cm-header-label">⚔️ コンボメモ</div>
+          </div>
+        </div>
+      </div>
+      <div class="cm-filter-bar">
+        <input type="text" class="cm-search-input" id="combo-search" placeholder="🔍 メモを検索..."
+          oninput="updateFilteredCards()">
+        <select class="cm-tag-filter" id="combo-filter-tag" onchange="updateFilteredCards()">
+          <option value="">🏷️ すべてのタグ</option>
+        </select>
+      </div>
+      <div class="cm-cards" id="combo-cards"></div>
+      <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
     </div>
   </div>
-</div>
 
-<script>
-// ─── サービスワーカー登録 ───
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('SW registered:', reg.scope))
-      .catch(err => console.log('SW registration failed:', err));
-  });
-}
+  <!-- ════════════════════════════ 立ち回り専用画面 ════════════════════════════ -->
+  <div id="screen-neutral" class="screen">
+    <div class="cm-main">
+      <div class="cm-header">
+        <button class="header-back" onclick="goBackFromNeutral()">&#8592;</button>
+        <div class="cm-header-info">
+          <div class="cm-header-emoji" id="neutral-header-emoji"></div>
+          <div>
+            <div class="cm-header-name" id="neutral-header-name"></div>
+            <div class="cm-header-label">🎯 立ち回りメモ</div>
+          </div>
+        </div>
+      </div>
+      <div class="cm-filter-bar">
+        <input type="text" class="cm-search-input" id="neutral-search" placeholder="🔍 メモを検索..."
+          oninput="updateFilteredCards()">
+        <select class="cm-tag-filter" id="neutral-filter-tag" onchange="updateFilteredCards()">
+          <option value="">🏷️ すべてのタグ</option>
+        </select>
+      </div>
+      <div class="cm-cards" id="neutral-cards"></div>
+      <button class="cm-add-btn" onclick="openMemoModal()">＋</button>
+    </div>
+  </div>
 
-// ─── ヘルプモーダル ───
-function openAboutModal() {
-  document.getElementById('about-overlay').classList.add('active');
-}
-function closeAboutModal(event) {
-  if (event && event.target !== document.getElementById('about-overlay')) return;
-  document.getElementById('about-overlay').classList.remove('active');
-}
+  <!-- ════════════════════════════ メモ追加/編集モーダル ════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeMemoModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-header-title" id="modal-title">📝 メモを追加</span>
+        <button class="modal-close" onclick="closeMemoModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label>タイトル</label>
+          <input type="text" id="memo-input-title" placeholder="（例：対空が強い、起き攻めに注意…）" />
+        </div>
+        <div class="modal-field">
+          <label>タグ（複数選択可）</label>
+          <div class="tag-options" id="tag-options">
+            <div class="tag-option" data-tag="important" onclick="toggleTagOption(this)">
+              <span class="tag-check">○</span> 🔴 重要
+            </div>
+            <div class="tag-option" data-tag="low" onclick="toggleTagOption(this)">
+              <span class="tag-check">○</span> 🔵 優先度低め
+            </div>
+            <div class="tag-option" data-tag="hard" onclick="toggleTagOption(this)">
+              <span class="tag-check">○</span> 🟠 難しい
+            </div>
+            <div class="tag-option" data-tag="easy" onclick="toggleTagOption(this)">
+              <span class="tag-check">○</span> 🟢 簡単
+            </div>
+          </div>
+        </div>
+        <div class="modal-field" id="modal-field-content">
+          <label>内容</label>
+          <textarea id="memo-input-content" placeholder="メモの詳細を入力…"></textarea>
+        </div>
+        <div class="modal-field" id="modal-field-combo" style="display:none;">
+          <label>コンボ内容（パーツをタップして入力）</label>
+          <div class="combo-chain-builder" id="combo-chain-builder"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-cancel" onclick="closeMemoModal()">キャンセル</button>
+        <button class="modal-btn modal-btn-save" onclick="saveMemoCard()">💾 保存</button>
+      </div>
+    </div>
+  </div>
 
-// ─── テーマ切り替え ───
-function toggleTheme() {
-  const isLight = document.body.classList.toggle('light-theme');
-  const toggleBtn = document.getElementById('theme-toggle');
-  if (toggleBtn) toggleBtn.textContent = isLight ? '☀️' : '🌙';
-  localStorage.setItem('sf6memo_theme', isLight ? 'light' : 'dark');
-}
+  <!-- 矢印編集メニュー -->
+  <div id="arrow-popup" class="arrow-popup">
+    <div class="arrow-popup-item" onclick="setArrowLink('rush')">💨 キャンセルラッシュ</div>
+    <div class="arrow-popup-item" onclick="setArrowLink('walk')">👣 微歩き</div>
+    <div class="arrow-popup-item" onclick="setArrowLink('frame')">⏱️ フレーム数...</div>
+    <div class="arrow-popup-item" onclick="setArrowLink(null)" style="color: #ff4444;">❌ 通常の矢印に戻す</div>
+  </div>
 
-function applySavedTheme() {
-  const saved = localStorage.getItem('sf6memo_theme');
-  if (saved === 'light') {
-    document.body.classList.add('light-theme');
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (toggleBtn) toggleBtn.textContent = '☀️';
-  }
-}
-applySavedTheme();
+  <!-- ─── ヘルプモーダル ─── -->
+  <div class="modal-overlay" id="about-overlay" onclick="closeAboutModal(event)">
+    <div class="modal" id="about-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">📖 アプリについて</h2>
+        <button class="close-btn" onclick="closeAboutModal()">×</button>
+      </div>
+      <div class="modal-body about-content">
+        <p>このアプリは現在Beta版です。バグや不具合、改善の要望などがあればぜひ開発者のX (Twitter) <a href="https://x.com/letmeshee" target="_blank"
+            class="about-link">@letmeshee</a> までお願いします。</p>
+        <p><strong>📱 スマホアプリとして使う場合</strong><br>ブラウザの「共有」メニューから「ホーム画面に追加」を選ぶことで、スマホアプリと同じように起動して使えるようになります。</p>
+        <p><strong>☁️
+            データの共有とバックアップ</strong><br>画面右上のアイコンから、攻略内容をファイル（JSON）としてエクスポートしたり、インポートしたりできます。友達とデータを共有したり、自分用のバックアップとして活用いただけます。
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="save-btn" style="width:100%; justify-content:center;" onclick="closeAboutModal()">とじる</button>
+      </div>
+    </div>
+  </div>
 
-// ─── キャラ表のサイズ変更 ───
-function updateCharSize() {
-  const slider = document.getElementById('char-size-slider');
-  if (slider) {
-    const size = slider.value;
-    document.documentElement.style.setProperty('--char-size', size + 'px');
-    localStorage.setItem('sf6memo_char_size', size);
-  }
-}
-
-function applySavedCharSize() {
-  const saved = localStorage.getItem('sf6memo_char_size');
-  const slider = document.getElementById('char-size-slider');
-  if (saved) {
-    document.documentElement.style.setProperty('--char-size', saved + 'px');
-    if (slider) slider.value = saved;
-  }
-}
-applySavedCharSize();
-
-// ─── データインポート・エクスポート（マージ機能） ───
-function exportData() {
-  const data = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith('sf6')) {
-      data[key] = localStorage.getItem(key);
+  <script>
+    // ─── サービスワーカー登録 ───
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
     }
-  }
-  const jsonStr = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonStr], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  
-  const a = document.createElement('a');
-  a.href = url;
-  const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  a.download = `sf6_fight_note_data_${date}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
 
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+    // ─── ヘルプモーダル ───
+    function openAboutModal() {
+      document.getElementById('about-overlay').classList.add('active');
+    }
+    function closeAboutModal(event) {
+      if (event && event.target !== document.getElementById('about-overlay')) return;
+      document.getElementById('about-overlay').classList.remove('active');
+    }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const importedData = JSON.parse(e.target.result);
-      let importedCount = 0;
+    // ─── テーマ切り替え ───
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-theme');
+      const toggleBtn = document.getElementById('theme-toggle');
+      if (toggleBtn) toggleBtn.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('sf6memo_theme', isLight ? 'light' : 'dark');
+    }
 
-      for (const key in importedData) {
-        if (!key.startsWith('sf6')) continue;
-        
-        const newValueStr = importedData[key];
-        const existingValueStr = localStorage.getItem(key);
+    function applySavedTheme() {
+      const saved = localStorage.getItem('sf6memo_theme');
+      if (saved === 'light') {
+        document.body.classList.add('light-theme');
+        const toggleBtn = document.getElementById('theme-toggle');
+        if (toggleBtn) toggleBtn.textContent = '☀️';
+      }
+    }
+    applySavedTheme();
 
-        // 設定（テーマやサイズ）は読み込まない（または上書きでもよいが、今回はスキップしてマージ対象に専念）
-        if (key === 'sf6memo_theme' || key === 'sf6memo_char_size') {
-          continue; 
+    // ─── キャラ表のサイズ変更 ───
+    function updateCharSize() {
+      const slider = document.getElementById('char-size-slider');
+      if (slider) {
+        const size = slider.value;
+        document.documentElement.style.setProperty('--char-size', size + 'px');
+        localStorage.setItem('sf6memo_char_size', size);
+      }
+    }
+
+    function applySavedCharSize() {
+      const saved = localStorage.getItem('sf6memo_char_size');
+      const slider = document.getElementById('char-size-slider');
+      if (saved) {
+        document.documentElement.style.setProperty('--char-size', saved + 'px');
+        if (slider) slider.value = saved;
+      }
+    }
+    applySavedCharSize();
+
+    // ─── データインポート・エクスポート（マージ機能） ───
+    function exportData() {
+      const data = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('sf6')) {
+          data[key] = localStorage.getItem(key);
         }
+      }
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
 
-        if (!existingValueStr) {
-          // 既存データなしならそのまま保存
-          localStorage.setItem(key, newValueStr);
-          importedCount++;
-          continue;
-        }
+      const a = document.createElement('a');
+      a.href = url;
+      const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      a.download = `sf6_fight_note_data_${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
 
-        // 既存データとのマージ処理
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
         try {
-          const existingArr = JSON.parse(existingValueStr);
-          if (Array.isArray(existingArr)) {
-            const newArr = JSON.parse(newValueStr);
-            if (Array.isArray(newArr)) {
-              // 配列の場合は結合
-              const merged = existingArr.concat(newArr);
-              localStorage.setItem(key, JSON.stringify(merged));
+          const importedData = JSON.parse(e.target.result);
+          let importedCount = 0;
+
+          for (const key in importedData) {
+            if (!key.startsWith('sf6')) continue;
+
+            const newValueStr = importedData[key];
+            const existingValueStr = localStorage.getItem(key);
+
+            // 設定（テーマやサイズ）は読み込まない（または上書きでもよいが、今回はスキップしてマージ対象に専念）
+            if (key === 'sf6memo_theme' || key === 'sf6memo_char_size') {
+              continue;
             }
-          } else {
-            // 文字列化された非配列JSONの場合は上書き
-            localStorage.setItem(key, newValueStr);
+
+            if (!existingValueStr) {
+              // 既存データなしならそのまま保存
+              localStorage.setItem(key, newValueStr);
+              importedCount++;
+              continue;
+            }
+
+            // 既存データとのマージ処理
+            try {
+              const existingArr = JSON.parse(existingValueStr);
+              if (Array.isArray(existingArr)) {
+                const newArr = JSON.parse(newValueStr);
+                if (Array.isArray(newArr)) {
+                  // 配列の場合は結合
+                  const merged = existingArr.concat(newArr);
+                  localStorage.setItem(key, JSON.stringify(merged));
+                }
+              } else {
+                // 文字列化された非配列JSONの場合は上書き
+                localStorage.setItem(key, newValueStr);
+              }
+            } catch (parseError) {
+              // JSONパースエラー ＝ ただのテキスト（「その他」タブなどの文字列）
+              if (existingValueStr !== newValueStr && newValueStr.trim() !== "") {
+                const mergedText = existingValueStr + '\\n\\n-- 追加データ --\\n' + newValueStr;
+                localStorage.setItem(key, mergedText);
+              }
+            }
+            importedCount++;
           }
-        } catch (parseError) {
-          // JSONパースエラー ＝ ただのテキスト（「その他」タブなどの文字列）
-          if (existingValueStr !== newValueStr && newValueStr.trim() !== "") {
-             const mergedText = existingValueStr + '\\n\\n-- 追加データ --\\n' + newValueStr;
-             localStorage.setItem(key, mergedText);
-          }
+
+          alert('✅ データの取り込み（マージ）が完了しました！\\n設定を反映させるため、画面を再読み込みします。');
+          location.reload();
+        } catch (err) {
+          alert('エラー: ファイルの読み込みに失敗しました。\\n正しい形式のJSONファイルを選択してください。');
+          console.error(err);
         }
-        importedCount++;
-      }
-
-      alert('✅ データの取り込み（マージ）が完了しました！\\n設定を反映させるため、画面を再読み込みします。');
-      location.reload();
-    } catch (err) {
-      alert('エラー: ファイルの読み込みに失敗しました。\\n正しい形式のJSONファイルを選択してください。');
-      console.error(err);
+        // 同じファイルを連続で選べるようにリセット
+        event.target.value = '';
+      };
+      reader.readAsText(file);
     }
-    // 同じファイルを連続で選べるようにリセット
-    event.target.value = '';
-  };
-  reader.readAsText(file);
-}
 
-// ─── キャラクターデータ ───
-const CHARACTERS = [
-  { id:'ryu',      name:'リュウ',       emoji:'🥋', origin:'日本' },
-  { id:'ken',      name:'ケン',         emoji:'🔥', origin:'アメリカ' },
-  { id:'chun-li',  name:'春麗',         emoji:'💙', origin:'中国' },
-  { id:'guile',    name:'ガイル',       emoji:'🇺🇸', origin:'アメリカ' },
-  { id:'blanka',   name:'ブランカ',     emoji:'⚡', origin:'ブラジル' },
-  { id:'dhalsim',  name:'ダルシム',     emoji:'🔮', origin:'インド' },
-  { id:'ehonda',   name:'E・本田',      emoji:'🎌', origin:'日本' },
-  { id:'zangief',  name:'ザンギエフ',  emoji:'🐻', origin:'ロシア' },
-  { id:'cammy',    name:'キャミィ',     emoji:'🐱', origin:'イギリス' },
-  { id:'deejay',   name:'ディージェイ',emoji:'🎵', origin:'ジャマイカ' },
-  { id:'luke',     name:'ルーク',       emoji:'🤜', origin:'アメリカ' },
-  { id:'jamie',    name:'ジェイミー',   emoji:'🍶', origin:'中国' },
-  { id:'kimberly', name:'キンバリー',   emoji:'🌸', origin:'アメリカ' },
-  { id:'manon',    name:'マノン',       emoji:'🥇', origin:'フランス' },
-  { id:'marisa',   name:'マリーザ',     emoji:'🏛️', origin:'イタリア' },
-  { id:'lily',     name:'リリー',       emoji:'💨', origin:'アメリカ' },
-  { id:'jp',       name:'JP',           emoji:'🦯', origin:'ロシア' },
-  { id:'juri',     name:'ジュリ',       emoji:'🕷️', origin:'韓国' },
-  { id:'rashid',   name:'ラシード',     emoji:'🌪️', origin:'中東' },
-  { id:'aki',      name:'A.K.I.',       emoji:'🐍', origin:'中国' },
-  { id:'ed',       name:'エド',         emoji:'🥊', origin:'イギリス' },
-  { id:'akuma',    name:'豪鬼',         emoji:'👹', origin:'日本' },
-  { id:'mbison',   name:'ベガ',         emoji:'👾', origin:'不明' },
-  { id:'terry',    name:'テリー',       emoji:'🧢', origin:'アメリカ' },
-  { id:'mai',      name:'舞',           emoji:'🦋', origin:'日本' },
-  { id:'elena',    name:'エレナ',       emoji:'🌍', origin:'ケニア' },
-  { id:'sagat',    name:'サガット',     emoji:'🐯', origin:'タイ' },
-  { id:'viper',    name:'C.ヴァイパー', emoji:'🕶️', origin:'アメリカ' },
-  { id:'alex',     name:'アレックス',   emoji:'💪', origin:'アメリカ' },
-];
+    // ─── キャラクターデータ ───
+    const CHARACTERS = [
+      { id: 'ryu', name: 'リュウ', emoji: '🥋', origin: '日本' },
+      { id: 'ken', name: 'ケン', emoji: '🔥', origin: 'アメリカ' },
+      { id: 'chun-li', name: '春麗', emoji: '💙', origin: '中国' },
+      { id: 'guile', name: 'ガイル', emoji: '🇺🇸', origin: 'アメリカ' },
+      { id: 'blanka', name: 'ブランカ', emoji: '⚡', origin: 'ブラジル' },
+      { id: 'dhalsim', name: 'ダルシム', emoji: '🔮', origin: 'インド' },
+      { id: 'ehonda', name: 'E・本田', emoji: '🎌', origin: '日本' },
+      { id: 'zangief', name: 'ザンギエフ', emoji: '🐻', origin: 'ロシア' },
+      { id: 'cammy', name: 'キャミィ', emoji: '🐱', origin: 'イギリス' },
+      { id: 'deejay', name: 'ディージェイ', emoji: '🎵', origin: 'ジャマイカ' },
+      { id: 'luke', name: 'ルーク', emoji: '🤜', origin: 'アメリカ' },
+      { id: 'jamie', name: 'ジェイミー', emoji: '🍶', origin: '中国' },
+      { id: 'kimberly', name: 'キンバリー', emoji: '🌸', origin: 'アメリカ' },
+      { id: 'manon', name: 'マノン', emoji: '🥇', origin: 'フランス' },
+      { id: 'marisa', name: 'マリーザ', emoji: '🏛️', origin: 'イタリア' },
+      { id: 'lily', name: 'リリー', emoji: '💨', origin: 'アメリカ' },
+      { id: 'jp', name: 'JP', emoji: '🦯', origin: 'ロシア' },
+      { id: 'juri', name: 'ジュリ', emoji: '🕷️', origin: '韓国' },
+      { id: 'rashid', name: 'ラシード', emoji: '🌪️', origin: '中東' },
+      { id: 'aki', name: 'A.K.I.', emoji: '🐍', origin: '中国' },
+      { id: 'ed', name: 'エド', emoji: '🥊', origin: 'イギリス' },
+      { id: 'akuma', name: '豪鬼', emoji: '👹', origin: '日本' },
+      { id: 'mbison', name: 'ベガ', emoji: '👾', origin: '不明' },
+      { id: 'terry', name: 'テリー', emoji: '🧢', origin: 'アメリカ' },
+      { id: 'mai', name: '舞', emoji: '🦋', origin: '日本' },
+      { id: 'elena', name: 'エレナ', emoji: '🌍', origin: 'ケニア' },
+      { id: 'sagat', name: 'サガット', emoji: '🐯', origin: 'タイ' },
+      { id: 'viper', name: 'C.ヴァイパー', emoji: '🕶️', origin: 'アメリカ' },
+      { id: 'alex', name: 'アレックス', emoji: '💪', origin: 'アメリカ' },
+    ];
 
-const TABS = [
-  { id:'countermeasure', label:'キャラ対策', icon:'🛡️',  isCm: true },
-  { id:'combo',          label:'コンボ',     icon:'⚔️',  isCombo: true },
-  { id:'neutral',        label:'立ち回り',   icon:'🎯',  isNeutral: true },
-  { id:'other',          label:'その他',     icon:'📝',  placeholder:'その他のメモ…\n例：セットプレイ、起き攻め、注意点など' },
-];
+    const TABS = [
+      { id: 'countermeasure', label: 'キャラ対策', icon: '🛡️', isCm: true },
+      { id: 'combo', label: 'コンボ', icon: '⚔️', isCombo: true },
+      { id: 'neutral', label: '立ち回り', icon: '🎯', isNeutral: true },
+      { id: 'other', label: 'その他', icon: '📝', placeholder: 'その他のメモ…\n例：セットプレイ、起き攻め、注意点など' },
+    ];
 
-const TAG_LABELS = {
-  important:   { label:'重要',       cssClass:'cm-tag-important' },
-  low:         { label:'優先度低め',   cssClass:'cm-tag-low' },
-  hard:        { label:'難しい',      cssClass:'cm-tag-hard' },
-  easy:        { label:'簡単',        cssClass:'cm-tag-easy' },
-  stare:       { label:'ガン見',      cssClass:'cm-tag-stare' },
-  // コンボ用
-  'char-only': { label:'キャラ限定',   cssClass:'cm-tag-char-only' },
-  sa1:         { label:'SA1',        cssClass:'cm-tag-sa1' },
-  sa2:         { label:'SA2',        cssClass:'cm-tag-sa2' },
-  sa3:         { label:'SA3',        cssClass:'cm-tag-sa3' },
-  allin:       { label:'オールイン',   cssClass:'cm-tag-allin' },
-  pos:         { label:'位置限定',     cssClass:'cm-tag-position' },
-  // 立ち回り用
-  'neu-all':    { label:'全体',        cssClass:'cm-tag-neu-all' },
-  'neu-sit':    { label:'場面',        cssClass:'cm-tag-neu-sit' },
-  'neu-growth': { label:'伸ばしどころ', cssClass:'cm-tag-neu-growth' },
-  'neu-test':   { label:'試し中',      cssClass:'cm-tag-neu-test' },
-  'neu-pend':   { label:'保留',        cssClass:'cm-tag-neu-pend' },
-};
+    const TAG_LABELS = {
+      important: { label: '重要', cssClass: 'cm-tag-important' },
+      low: { label: '優先度低め', cssClass: 'cm-tag-low' },
+      hard: { label: '難しい', cssClass: 'cm-tag-hard' },
+      easy: { label: '簡単', cssClass: 'cm-tag-easy' },
+      stare: { label: 'ガン見', cssClass: 'cm-tag-stare' },
+      // コンボ用
+      'char-only': { label: 'キャラ限定', cssClass: 'cm-tag-char-only' },
+      sa1: { label: 'SA1', cssClass: 'cm-tag-sa1' },
+      sa2: { label: 'SA2', cssClass: 'cm-tag-sa2' },
+      sa3: { label: 'SA3', cssClass: 'cm-tag-sa3' },
+      allin: { label: 'オールイン', cssClass: 'cm-tag-allin' },
+      pos: { label: '位置限定', cssClass: 'cm-tag-position' },
+      // 立ち回り用
+      'neu-all': { label: '全体', cssClass: 'cm-tag-neu-all' },
+      'neu-sit': { label: '場面', cssClass: 'cm-tag-neu-sit' },
+      'neu-growth': { label: '伸ばしどころ', cssClass: 'cm-tag-neu-growth' },
+      'neu-test': { label: '試し中', cssClass: 'cm-tag-neu-test' },
+      'neu-pend': { label: '保留', cssClass: 'cm-tag-neu-pend' },
+    };
 
-let currentChar = null;
+    let currentChar = null;
 
-// CM(キャラ対策)状態
-let cmMyChar = null;       
-let cmTargetChar = null;   
+    // CM(キャラ対策)状態
+    let cmMyChar = null;
+    let cmTargetChar = null;
 
-// Combo(コンボ)状態
-let comboMyChar = null;
+    // Combo(コンボ)状態
+    let comboMyChar = null;
 
-// Neutral(立ち回り)状態
-let neutralMyChar = null;
+    // Neutral(立ち回り)状態
+    let neutralMyChar = null;
 
-// モーダル状態
-let currentMemoType = 'cm'; // 'cm', 'combo', 'neutral'
-let editingMemoIdx = -1;   // 編集中のメモインデックス(-1=新規)
+    // モーダル状態
+    let currentMemoType = 'cm'; // 'cm', 'combo', 'neutral'
+    let editingMemoIdx = -1;   // 編集中のメモインデックス(-1=新規)
 
-// ─── ユーティリティ ───
-function storageKey(charId, tabId) { return `sf6memo_${charId}_${tabId}`; }
-function cmStorageKey(myCharId, targetCharId) { return `sf6cm_${myCharId}_vs_${targetCharId}`; }
-function comboStorageKey(charId) { return `sf6combo_${charId}`; }
-function neutralStorageKey(charId) { return `sf6neutral_${charId}`; }
+    // ─── ユーティリティ ───
+    function storageKey(charId, tabId) { return `sf6memo_${charId}_${tabId}`; }
+    function cmStorageKey(myCharId, targetCharId) { return `sf6cm_${myCharId}_vs_${targetCharId}`; }
+    function comboStorageKey(charId) { return `sf6combo_${charId}`; }
+    function neutralStorageKey(charId) { return `sf6neutral_${charId}`; }
 
-function getCMMemos(myCharId, targetCharId) {
-  const raw = localStorage.getItem(cmStorageKey(myCharId, targetCharId));
-  return raw ? JSON.parse(raw) : [];
-}
-function setCMMemos(myCharId, targetCharId, memos) {
-  localStorage.setItem(cmStorageKey(myCharId, targetCharId), JSON.stringify(memos));
-}
+    function getCMMemos(myCharId, targetCharId) {
+      const raw = localStorage.getItem(cmStorageKey(myCharId, targetCharId));
+      return raw ? JSON.parse(raw) : [];
+    }
+    function setCMMemos(myCharId, targetCharId, memos) {
+      localStorage.setItem(cmStorageKey(myCharId, targetCharId), JSON.stringify(memos));
+    }
 
-function getComboMemos(charId) {
-  const raw = localStorage.getItem(comboStorageKey(charId));
-  return raw ? JSON.parse(raw) : [];
-}
-function setComboMemos(charId, memos) {
-  localStorage.setItem(comboStorageKey(charId), JSON.stringify(memos));
-}
+    function getComboMemos(charId) {
+      const raw = localStorage.getItem(comboStorageKey(charId));
+      return raw ? JSON.parse(raw) : [];
+    }
+    function setComboMemos(charId, memos) {
+      localStorage.setItem(comboStorageKey(charId), JSON.stringify(memos));
+    }
 
-function getNeutralMemos(charId) {
-  const raw = localStorage.getItem(neutralStorageKey(charId));
-  return raw ? JSON.parse(raw) : [];
-}
-function setNeutralMemos(charId, memos) {
-  localStorage.setItem(neutralStorageKey(charId), JSON.stringify(memos));
-}
+    function getNeutralMemos(charId) {
+      const raw = localStorage.getItem(neutralStorageKey(charId));
+      return raw ? JSON.parse(raw) : [];
+    }
+    function setNeutralMemos(charId, memos) {
+      localStorage.setItem(neutralStorageKey(charId), JSON.stringify(memos));
+    }
 
-function hasMemo(charId) {
-  // 通常タブのメモ
-  const normalMemo = TABS.filter(t => !t.isCm && !t.isCombo && !t.isNeutral).some(t =>
-    (localStorage.getItem(storageKey(charId, t.id)) || '').trim() !== ''
-  );
-  if (normalMemo) return true;
-  // コンボメモ
-  if (getComboMemos(charId).length > 0) return true;
-  // 立ち回りメモ
-  if (getNeutralMemos(charId).length > 0) return true;
-  // キャラ対策のメモ
-  return CHARACTERS.some(c => getCMMemos(charId, c.id).length > 0);
-}
+    function hasMemo(charId) {
+      // 通常タブのメモ
+      const normalMemo = TABS.filter(t => !t.isCm && !t.isCombo && !t.isNeutral).some(t =>
+        (localStorage.getItem(storageKey(charId, t.id)) || '').trim() !== ''
+      );
+      if (normalMemo) return true;
+      // コンボメモ
+      if (getComboMemos(charId).length > 0) return true;
+      // 立ち回りメモ
+      if (getNeutralMemos(charId).length > 0) return true;
+      // キャラ対策のメモ
+      return CHARACTERS.some(c => getCMMemos(charId, c.id).length > 0);
+    }
 
-// ═══════════════════════════════════════════════════
-//  キャラ一覧画面
-// ═══════════════════════════════════════════════════
-function renderCharGrid(chars) {
-  const grid = document.getElementById('char-grid');
-  grid.innerHTML = '';
-  chars.forEach(c => {
-    const div = document.createElement('div');
-    div.className = 'char-card';
-    div.innerHTML = `
+    // ═══════════════════════════════════════════════════
+    //  キャラ一覧画面
+    // ═══════════════════════════════════════════════════
+    function renderCharGrid(chars) {
+      const grid = document.getElementById('char-grid');
+      grid.innerHTML = '';
+      chars.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'char-card';
+        div.innerHTML = `
       <div class="char-portrait">${c.emoji}</div>
-      <div class="char-name${hasMemo(c.id) ? ' has-memo':''}">${c.name}</div>
+      <div class="char-name${hasMemo(c.id) ? ' has-memo' : ''}">${c.name}</div>
     `;
-    div.addEventListener('click', () => openDetail(c));
-    grid.appendChild(div);
-  });
-}
+        div.addEventListener('click', () => openDetail(c));
+        grid.appendChild(div);
+      });
+    }
 
-function filterChars() {
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const filtered = q
-    ? CHARACTERS.filter(c => c.name.toLowerCase().includes(q) || c.id.includes(q))
-    : CHARACTERS;
-  renderCharGrid(filtered);
-}
+    function filterChars() {
+      const q = document.getElementById('search-input').value.trim().toLowerCase();
+      const filtered = q
+        ? CHARACTERS.filter(c => c.name.toLowerCase().includes(q) || c.id.includes(q))
+        : CHARACTERS;
+      renderCharGrid(filtered);
+    }
 
-// ═══════════════════════════════════════════════════
-//  キャラ詳細画面
-// ═══════════════════════════════════════════════════
-function switchScreen(hideId, showId) {
-  document.getElementById(hideId).classList.remove('active');
-  document.getElementById(showId).classList.add('active');
-}
+    // ═══════════════════════════════════════════════════
+    //  キャラ詳細画面
+    // ═══════════════════════════════════════════════════
+    function switchScreen(hideId, showId) {
+      document.getElementById(hideId).classList.remove('active');
+      document.getElementById(showId).classList.add('active');
+    }
 
-function openDetail(char) {
-  currentChar = char;
-  document.getElementById('detail-portrait').textContent = char.emoji;
-  document.getElementById('detail-name').textContent = char.name;
-  renderTabs(char);
-  switchScreen('screen-list', 'screen-detail');
-}
+    function openDetail(char) {
+      currentChar = char;
+      document.getElementById('detail-portrait').textContent = char.emoji;
+      document.getElementById('detail-name').textContent = char.name;
+      renderTabs(char);
+      switchScreen('screen-list', 'screen-detail');
+    }
 
-function renderTabs(char) {
-  const container = document.getElementById('tabs-container');
-  container.innerHTML = '';
+    function renderTabs(char) {
+      const container = document.getElementById('tabs-container');
+      container.innerHTML = '';
 
-  TABS.forEach((tab, idx) => {
-    const section = document.createElement('div');
-    section.className = 'tab-section';
-    section.id = `tab-sec-${tab.id}`;
+      TABS.forEach((tab, idx) => {
+        const section = document.createElement('div');
+        section.className = 'tab-section';
+        section.id = `tab-sec-${tab.id}`;
 
-    if (tab.isCm || tab.isCombo || tab.isNeutral) {
-      // 専用画面へ遷移するボタン
-      let count = 0;
-      let action = '';
-      if (tab.isCm) {
-        count = CHARACTERS.reduce((sum, c) => sum + getCMMemos(char.id, c.id).length, 0);
-        action = 'openCountermeasure()';
-      } else if (tab.isCombo) {
-        count = getComboMemos(char.id).length;
-        action = 'openCombo()';
-      } else {
-        count = getNeutralMemos(char.id).length;
-        action = 'openNeutral()';
-      }
-      section.innerHTML = `
+        if (tab.isCm || tab.isCombo || tab.isNeutral) {
+          // 専用画面へ遷移するボタン
+          let count = 0;
+          let action = '';
+          if (tab.isCm) {
+            count = CHARACTERS.reduce((sum, c) => sum + getCMMemos(char.id, c.id).length, 0);
+            action = 'openCountermeasure()';
+          } else if (tab.isCombo) {
+            count = getComboMemos(char.id).length;
+            action = 'openCombo()';
+          } else {
+            count = getNeutralMemos(char.id).length;
+            action = 'openNeutral()';
+          }
+          section.innerHTML = `
         <div class="tab-header" onclick="${action}">
           <span class="tab-icon">${tab.icon}</span>
           <span class="tab-label">${tab.label}</span>
@@ -1575,10 +2034,10 @@ function renderTabs(char) {
           <span class="tab-arrow" style="transform:rotate(-90deg);">▼</span>
         </div>
       `;
-    } else {
-      const saved = localStorage.getItem(storageKey(char.id, tab.id)) || '';
-      section.className = 'tab-section open'; // 最初から開いた状態にする
-      section.innerHTML = `
+        } else {
+          const saved = localStorage.getItem(storageKey(char.id, tab.id)) || '';
+          section.className = 'tab-section open'; // 最初から開いた状態にする
+          section.innerHTML = `
         <div class="tab-header" style="cursor: default;">
           <span class="tab-icon">${tab.icon}</span>
           <span class="tab-label">${tab.label}</span>
@@ -1593,271 +2052,271 @@ function renderTabs(char) {
           </div>
         </div>
       `;
+        }
+        container.appendChild(section);
+      });
     }
-    container.appendChild(section);
-  });
-}
 
-function toggleTab(tabId) {
-  const section = document.getElementById(`tab-sec-${tabId}`);
-  const isOpen = section.classList.contains('open');
-  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('open'));
-  if (!isOpen) section.classList.add('open');
-}
+    function toggleTab(tabId) {
+      const section = document.getElementById(`tab-sec-${tabId}`);
+      const isOpen = section.classList.contains('open');
+      document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('open'));
+      if (!isOpen) section.classList.add('open');
+    }
 
-function saveMemo(tabId) {
-  if (!currentChar) return;
-  const val = document.getElementById(`memo-${tabId}`).value;
-  localStorage.setItem(storageKey(currentChar.id, tabId), val);
-  const btn = document.getElementById(`btn-${tabId}`);
-  btn.textContent = '✅ 保存しました！';
-  btn.classList.add('saved');
-  setTimeout(() => { btn.textContent = '💾 保存'; btn.classList.remove('saved'); }, 1800);
-}
+    function saveMemo(tabId) {
+      if (!currentChar) return;
+      const val = document.getElementById(`memo-${tabId}`).value;
+      localStorage.setItem(storageKey(currentChar.id, tabId), val);
+      const btn = document.getElementById(`btn-${tabId}`);
+      btn.textContent = '✅ 保存しました！';
+      btn.classList.add('saved');
+      setTimeout(() => { btn.textContent = '💾 保存'; btn.classList.remove('saved'); }, 1800);
+    }
 
-function goBack() {
-  switchScreen('screen-detail', 'screen-list');
-  filterChars();
-}
+    function goBack() {
+      switchScreen('screen-detail', 'screen-list');
+      filterChars();
+    }
 
-// ═══════════════════════════════════════════════════
-//  キャラ対策専用画面
-// ═══════════════════════════════════════════════════
-function openCountermeasure() {
-  currentMemoType = 'cm';
-  cmMyChar = currentChar;
-  cmTargetChar = CHARACTERS[0]; // デフォルト: 最初のキャラ
-  initFilterOptions('cm');
-  renderCMSidebar();
-  selectCMTarget(cmTargetChar);
-  switchScreen('screen-detail', 'screen-countermeasure');
-}
+    // ═══════════════════════════════════════════════════
+    //  キャラ対策専用画面
+    // ═══════════════════════════════════════════════════
+    function openCountermeasure() {
+      currentMemoType = 'cm';
+      cmMyChar = currentChar;
+      cmTargetChar = CHARACTERS[0]; // デフォルト: 最初のキャラ
+      initFilterOptions('cm');
+      renderCMSidebar();
+      selectCMTarget(cmTargetChar);
+      switchScreen('screen-detail', 'screen-countermeasure');
+    }
 
-function goBackFromCM() {
-  switchScreen('screen-countermeasure', 'screen-detail');
-  renderTabs(currentChar); // メモカウント更新
-}
+    function goBackFromCM() {
+      switchScreen('screen-countermeasure', 'screen-detail');
+      renderTabs(currentChar); // メモカウント更新
+    }
 
-function renderCMSidebar() {
-  const list = document.getElementById('cm-sidebar-list');
-  list.innerHTML = '';
-  CHARACTERS.forEach(c => {
-    const memoCount = getCMMemos(cmMyChar.id, c.id).length;
-    const item = document.createElement('div');
-    item.className = 'cm-sidebar-item' + (c.id === cmTargetChar.id ? ' active' : '');
-    item.innerHTML = `
+    function renderCMSidebar() {
+      const list = document.getElementById('cm-sidebar-list');
+      list.innerHTML = '';
+      CHARACTERS.forEach(c => {
+        const memoCount = getCMMemos(cmMyChar.id, c.id).length;
+        const item = document.createElement('div');
+        item.className = 'cm-sidebar-item' + (c.id === cmTargetChar.id ? ' active' : '');
+        item.innerHTML = `
       <span class="sb-emoji">${c.emoji}</span>
-      <span class="sb-name">${c.name}${memoCount ? ' ('+memoCount+')' : ''}</span>
+      <span class="sb-name">${c.name}${memoCount ? ' (' + memoCount + ')' : ''}</span>
     `;
-    item.addEventListener('click', () => selectCMTarget(c));
-    list.appendChild(item);
-  });
-}
-
-function selectCMTarget(char) {
-  cmTargetChar = char;
-  // ヘッダー更新
-  document.getElementById('cm-header-emoji').textContent = char.emoji;
-  document.getElementById('cm-header-name').textContent = `${cmMyChar.name} vs ${char.name}`;
-  // サイドバーのactive更新
-  document.querySelectorAll('.cm-sidebar-item').forEach((el, i) => {
-    el.classList.toggle('active', CHARACTERS[i].id === char.id);
-  });
-  updateFilteredCards();
-}
-
-// ═══════════════════════════════════════════════════
-//  コンボ専用画面
-// ═══════════════════════════════════════════════════
-function openCombo() {
-  currentMemoType = 'combo';
-  comboMyChar = currentChar;
-  document.getElementById('combo-header-emoji').textContent = currentChar.emoji;
-  document.getElementById('combo-header-name').textContent = `${currentChar.name} のコンボ`;
-  
-  initFilterOptions('combo');
-  updateFilteredCards();
-  switchScreen('screen-detail', 'screen-combo');
-}
-
-function goBackFromCombo() {
-  switchScreen('screen-combo', 'screen-detail');
-  renderTabs(currentChar); // メモカウント更新
-}
-
-// ═══════════════════════════════════════════════════
-//  立ち回り専用画面
-// ═══════════════════════════════════════════════════
-function openNeutral() {
-  currentMemoType = 'neutral';
-  neutralMyChar = currentChar;
-  document.getElementById('neutral-header-emoji').textContent = currentChar.emoji;
-  document.getElementById('neutral-header-name').textContent = `${currentChar.name} の立ち回り`;
-  
-  initFilterOptions('neutral');
-  updateFilteredCards();
-  switchScreen('screen-detail', 'screen-neutral');
-}
-
-function goBackFromNeutral() {
-  switchScreen('screen-neutral', 'screen-detail');
-  renderTabs(currentChar); // メモカウント更新
-}
-
-// ─── 検索 & フィルター設定 ───
-function initFilterOptions(type) {
-  let selectId = '';
-  let tags = [];
-  if (type === 'cm') {
-    selectId = 'cm-filter-tag';
-    tags = ['important', 'low', 'hard', 'easy', 'stare'];
-  } else if (type === 'combo') {
-    selectId = 'combo-filter-tag';
-    tags = ['char-only', 'sa1', 'sa2', 'sa3', 'allin', 'pos'];
-  } else if (type === 'neutral') {
-    selectId = 'neutral-filter-tag';
-    tags = ['neu-all', 'neu-sit', 'neu-growth', 'neu-test', 'neu-pend', 'important'];
-  }
-  
-  const select = document.getElementById(selectId);
-  if (!select) return;
-  
-  select.innerHTML = '<option value="">🏷️ すべてのタグ</option>';
-  tags.forEach(t => {
-    const info = TAG_LABELS[t];
-    if (info) {
-      const opt = document.createElement('option');
-      opt.value = t;
-      opt.textContent = info.label;
-      select.appendChild(opt);
+        item.addEventListener('click', () => selectCMTarget(c));
+        list.appendChild(item);
+      });
     }
-  });
 
-  // レンダリング前にインプットの初期化
-  const searchInputId = type === 'cm' ? 'cm-search' : (type === 'combo' ? 'combo-search' : 'neutral-search');
-  const searchInput = document.getElementById(searchInputId);
-  if (searchInput) searchInput.value = '';
-}
+    function selectCMTarget(char) {
+      cmTargetChar = char;
+      // ヘッダー更新
+      document.getElementById('cm-header-emoji').textContent = char.emoji;
+      document.getElementById('cm-header-name').textContent = `${cmMyChar.name} vs ${char.name}`;
+      // サイドバーのactive更新
+      document.querySelectorAll('.cm-sidebar-item').forEach((el, i) => {
+        el.classList.toggle('active', CHARACTERS[i].id === char.id);
+      });
+      updateFilteredCards();
+    }
 
-function updateFilteredCards() {
-  const memos = getActiveMemos();
-  let searchInputId = '';
-  let filterSelectId = '';
-  let containerId = '';
-  let icon = '';
+    // ═══════════════════════════════════════════════════
+    //  コンボ専用画面
+    // ═══════════════════════════════════════════════════
+    function openCombo() {
+      currentMemoType = 'combo';
+      comboMyChar = currentChar;
+      document.getElementById('combo-header-emoji').textContent = currentChar.emoji;
+      document.getElementById('combo-header-name').textContent = `${currentChar.name} のコンボ`;
 
-  if (currentMemoType === 'cm') {
-    searchInputId = 'cm-search';
-    filterSelectId = 'cm-filter-tag';
-    containerId = 'cm-cards';
-    icon = '🛡️';
-  } else if (currentMemoType === 'combo') {
-    searchInputId = 'combo-search';
-    filterSelectId = 'combo-filter-tag';
-    containerId = 'combo-cards';
-    icon = '⚔️';
-  } else {
-    searchInputId = 'neutral-search';
-    filterSelectId = 'neutral-filter-tag';
-    containerId = 'neutral-cards';
-    icon = '🎯';
-  }
+      initFilterOptions('combo');
+      updateFilteredCards();
+      switchScreen('screen-detail', 'screen-combo');
+    }
 
-  const searchEl = document.getElementById(searchInputId);
-  const filterEl = document.getElementById(filterSelectId);
-  const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
-  const filterTag = filterEl ? filterEl.value : '';
+    function goBackFromCombo() {
+      switchScreen('screen-combo', 'screen-detail');
+      renderTabs(currentChar); // メモカウント更新
+    }
 
-  const filtered = memos.map((m, i) => { m._originalIdx = i; return m; }).filter(m => {
-    let textMatch = true;
-    if (q) {
-      const titleMatch = (m.title || '').toLowerCase().includes(q);
-      let contentMatch = (m.content || '').toLowerCase().includes(q);
-      
-      if (m.comboParts) {
-        const partsMatch = m.comboParts.some(p => {
-          const pt = typeof p === 'string' ? p : p.text;
-          return pt.toLowerCase().includes(q);
-        });
-        if (partsMatch) contentMatch = true;
+    // ═══════════════════════════════════════════════════
+    //  立ち回り専用画面
+    // ═══════════════════════════════════════════════════
+    function openNeutral() {
+      currentMemoType = 'neutral';
+      neutralMyChar = currentChar;
+      document.getElementById('neutral-header-emoji').textContent = currentChar.emoji;
+      document.getElementById('neutral-header-name').textContent = `${currentChar.name} の立ち回り`;
+
+      initFilterOptions('neutral');
+      updateFilteredCards();
+      switchScreen('screen-detail', 'screen-neutral');
+    }
+
+    function goBackFromNeutral() {
+      switchScreen('screen-neutral', 'screen-detail');
+      renderTabs(currentChar); // メモカウント更新
+    }
+
+    // ─── 検索 & フィルター設定 ───
+    function initFilterOptions(type) {
+      let selectId = '';
+      let tags = [];
+      if (type === 'cm') {
+        selectId = 'cm-filter-tag';
+        tags = ['important', 'low', 'hard', 'easy', 'stare'];
+      } else if (type === 'combo') {
+        selectId = 'combo-filter-tag';
+        tags = ['char-only', 'sa1', 'sa2', 'sa3', 'allin', 'pos'];
+      } else if (type === 'neutral') {
+        selectId = 'neutral-filter-tag';
+        tags = ['neu-all', 'neu-sit', 'neu-growth', 'neu-test', 'neu-pend', 'important'];
       }
-      textMatch = titleMatch || contentMatch;
+
+      const select = document.getElementById(selectId);
+      if (!select) return;
+
+      select.innerHTML = '<option value="">🏷️ すべてのタグ</option>';
+      tags.forEach(t => {
+        const info = TAG_LABELS[t];
+        if (info) {
+          const opt = document.createElement('option');
+          opt.value = t;
+          opt.textContent = info.label;
+          select.appendChild(opt);
+        }
+      });
+
+      // レンダリング前にインプットの初期化
+      const searchInputId = type === 'cm' ? 'cm-search' : (type === 'combo' ? 'combo-search' : 'neutral-search');
+      const searchInput = document.getElementById(searchInputId);
+      if (searchInput) searchInput.value = '';
     }
 
-    let tagMatch = true;
-    if (filterTag) {
-      tagMatch = (m.tags || []).includes(filterTag);
+    function updateFilteredCards() {
+      const memos = getActiveMemos();
+      let searchInputId = '';
+      let filterSelectId = '';
+      let containerId = '';
+      let icon = '';
+
+      if (currentMemoType === 'cm') {
+        searchInputId = 'cm-search';
+        filterSelectId = 'cm-filter-tag';
+        containerId = 'cm-cards';
+        icon = '🛡️';
+      } else if (currentMemoType === 'combo') {
+        searchInputId = 'combo-search';
+        filterSelectId = 'combo-filter-tag';
+        containerId = 'combo-cards';
+        icon = '⚔️';
+      } else {
+        searchInputId = 'neutral-search';
+        filterSelectId = 'neutral-filter-tag';
+        containerId = 'neutral-cards';
+        icon = '🎯';
+      }
+
+      const searchEl = document.getElementById(searchInputId);
+      const filterEl = document.getElementById(filterSelectId);
+      const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+      const filterTag = filterEl ? filterEl.value : '';
+
+      const filtered = memos.map((m, i) => { m._originalIdx = i; return m; }).filter(m => {
+        let textMatch = true;
+        if (q) {
+          const titleMatch = (m.title || '').toLowerCase().includes(q);
+          let contentMatch = (m.content || '').toLowerCase().includes(q);
+
+          if (m.comboParts) {
+            const partsMatch = m.comboParts.some(p => {
+              const pt = typeof p === 'string' ? p : p.text;
+              return pt.toLowerCase().includes(q);
+            });
+            if (partsMatch) contentMatch = true;
+          }
+          textMatch = titleMatch || contentMatch;
+        }
+
+        let tagMatch = true;
+        if (filterTag) {
+          tagMatch = (m.tags || []).includes(filterTag);
+        }
+
+        return textMatch && tagMatch;
+      });
+
+      renderCardList(document.getElementById(containerId), filtered, icon);
     }
 
-    return textMatch && tagMatch;
-  });
+    // ═══════════════════════════════════════════════════
+    //  カード一覧レンダリング共通
+    // ═══════════════════════════════════════════════════
+    function getActiveMemos() {
+      if (currentMemoType === 'cm') return getCMMemos(cmMyChar.id, cmTargetChar.id);
+      if (currentMemoType === 'combo') return getComboMemos(comboMyChar.id);
+      return getNeutralMemos(neutralMyChar.id);
+    }
+    function setActiveMemos(memos) {
+      if (currentMemoType === 'cm') setCMMemos(cmMyChar.id, cmTargetChar.id, memos);
+      else if (currentMemoType === 'combo') setComboMemos(comboMyChar.id, memos);
+      else setNeutralMemos(neutralMyChar.id, memos);
+    }
 
-  renderCardList(document.getElementById(containerId), filtered, icon);
-}
+    function renderCardList(container, memos, icon) {
+      container.innerHTML = '';
 
-// ═══════════════════════════════════════════════════
-//  カード一覧レンダリング共通
-// ═══════════════════════════════════════════════════
-function getActiveMemos() {
-  if (currentMemoType === 'cm') return getCMMemos(cmMyChar.id, cmTargetChar.id);
-  if (currentMemoType === 'combo') return getComboMemos(comboMyChar.id);
-  return getNeutralMemos(neutralMyChar.id);
-}
-function setActiveMemos(memos) {
-  if (currentMemoType === 'cm') setCMMemos(cmMyChar.id, cmTargetChar.id, memos);
-  else if (currentMemoType === 'combo') setComboMemos(comboMyChar.id, memos);
-  else setNeutralMemos(neutralMyChar.id, memos);
-}
-
-function renderCardList(container, memos, icon) {
-  container.innerHTML = '';
-
-  if (memos.length === 0) {
-    container.innerHTML = `
+      if (memos.length === 0) {
+        container.innerHTML = `
       <div class="cm-empty">
         <div class="cm-empty-icon">${icon}</div>
         <div>まだメモがありません</div>
         <div style="margin-top:4px;font-size:12px;color:#666;">＋ボタンでメモを追加しよう</div>
       </div>
     `;
-    return;
-  }
+        return;
+      }
 
-  memos.forEach((memo, i) => {
-    const originalIdx = memo._originalIdx !== undefined ? memo._originalIdx : i;
-    const card = document.createElement('div');
-    card.className = 'cm-card';
-    const tagsHTML = (memo.tags || []).map(t => {
-      const info = TAG_LABELS[t];
-      return info ? `<span class="cm-tag ${info.cssClass}">${info.label}</span>` : '';
-    }).join('');
+      memos.forEach((memo, i) => {
+        const originalIdx = memo._originalIdx !== undefined ? memo._originalIdx : i;
+        const card = document.createElement('div');
+        card.className = 'cm-card';
+        const tagsHTML = (memo.tags || []).map(t => {
+          const info = TAG_LABELS[t];
+          return info ? `<span class="cm-tag ${info.cssClass}">${info.label}</span>` : '';
+        }).join('');
 
-    // コンボの場合はチェーン表示
-    let bodyHTML;
-    if (memo.comboParts && memo.comboParts.length > 0) {
-      const chainHTML = memo.comboParts.map((part, i) => {
-        const textVal = typeof part === 'string' ? part : part.text;
-        const linkVal = typeof part === 'string' ? null : part.link;
-        let html = `<span class="combo-chain-part">${escapeHtml(textVal)}</span>`;
-        if (i < memo.comboParts.length - 1) {
-          if (linkVal) {
-            const colorClass = linkVal.type === 'rush' ? 'label-rush' : (linkVal.type === 'frame' ? 'label-frame' : 'label-walk');
-            html += `<span style="display:inline-flex; flex-direction:column; align-items:center; margin: 0 4px; vertical-align: middle;">
+        // コンボの場合はチェーン表示
+        let bodyHTML;
+        if (memo.comboParts && memo.comboParts.length > 0) {
+          const chainHTML = memo.comboParts.map((part, i) => {
+            const textVal = typeof part === 'string' ? part : part.text;
+            const linkVal = typeof part === 'string' ? null : part.link;
+            let html = `<span class="combo-chain-part">${escapeHtml(textVal)}</span>`;
+            if (i < memo.comboParts.length - 1) {
+              if (linkVal) {
+                const colorClass = linkVal.type === 'rush' ? 'label-rush' : (linkVal.type === 'frame' ? 'label-frame' : 'label-walk');
+                html += `<span style="display:inline-flex; flex-direction:column; align-items:center; margin: 0 4px; vertical-align: middle;">
                        <span class="combo-arrow-label ${colorClass}">${escapeHtml(linkVal.label)}</span>
                        <span class="combo-chain-arrow">→</span>
                      </span>`;
-          } else {
-            html += `<span class="combo-chain-arrow" style="margin: 0 4px;">→</span>`;
-          }
+              } else {
+                html += `<span class="combo-chain-arrow" style="margin: 0 4px;">→</span>`;
+              }
+            }
+            return html;
+          }).join('');
+          bodyHTML = `<div class="combo-chain-display">${chainHTML}</div>`;
+        } else {
+          bodyHTML = `<div class="cm-card-body">${escapeHtml(memo.content || '')}</div>`;
         }
-        return html;
-      }).join('');
-      bodyHTML = `<div class="combo-chain-display">${chainHTML}</div>`;
-    } else {
-      bodyHTML = `<div class="cm-card-body">${escapeHtml(memo.content || '')}</div>`;
-    }
 
-    card.innerHTML = `
+        card.innerHTML = `
       <div class="cm-card-top">
         <span class="cm-card-title">${escapeHtml(memo.title || '無題')}</span>
         <button class="cm-card-delete" title="編集" onclick="editMemoCard(${originalIdx})">✏️</button>
@@ -1866,353 +2325,354 @@ function renderCardList(container, memos, icon) {
       ${tagsHTML ? `<div class="cm-card-tags">${tagsHTML}</div>` : ''}
       ${bodyHTML}
     `;
-    container.appendChild(card);
-  });
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-// ─── モーダル ───
-function openMemoModal(idx) {
-  editingMemoIdx = (idx !== undefined) ? idx : -1;
-  const isEdit = editingMemoIdx >= 0;
-
-  document.getElementById('modal-title').textContent = isEdit ? '✏️ メモを編集' : '📝 メモを追加';
-  
-  // モーダル内のプレースホルダーをタイプによって切り替え
-  const titleInput = document.getElementById('memo-input-title');
-  const contentInput = document.getElementById('memo-input-content');
-  const contentField = document.getElementById('modal-field-content');
-  const comboField = document.getElementById('modal-field-combo');
-
-  if (currentMemoType === 'combo') {
-    titleInput.placeholder = '例：画面端 弱K始動';
-    contentField.style.display = 'none';
-    comboField.style.display = 'block';
-    comboParts = [{ text: '', link: null }];  // 最初は空の1パーツ
-    renderComboChainBuilder();
-  } else if (currentMemoType === 'neutral') {
-    titleInput.placeholder = '例：中距離の牽制、対空意識…';
-    contentInput.placeholder = '立ち回りで意識することや連携、狙いを入力…';
-    contentField.style.display = 'block';
-    comboField.style.display = 'none';
-  } else {
-    titleInput.placeholder = '例：対空が強い、起き攻めに注意…';
-    contentInput.placeholder = '対策の詳細をメモしよう…';
-    contentField.style.display = 'block';
-    comboField.style.display = 'none';
-  }
-
-  // 入力値のリセット
-  titleInput.value = '';
-  contentInput.value = '';
-
-  // タグオプションの生成
-  const tagOptionsContainer = document.getElementById('tag-options');
-  tagOptionsContainer.innerHTML = '';
-  
-  const tagsToDisplay = (currentMemoType === 'combo') 
-    ? ['char-only', 'sa1', 'sa2', 'sa3', 'allin', 'pos']
-    : (currentMemoType === 'neutral')
-    ? ['neu-all', 'neu-sit', 'neu-growth', 'neu-test', 'neu-pend', 'important']
-    : ['important', 'low', 'hard', 'easy', 'stare'];
-    
-  tagsToDisplay.forEach(tagId => {
-    const info = TAG_LABELS[tagId];
-    const opt = document.createElement('div');
-    opt.className = 'tag-option';
-    opt.dataset.tag = tagId;
-    opt.onclick = () => toggleTagOption(opt);
-    opt.innerHTML = `<span class="tag-check">○</span> ${info.label}`;
-    tagOptionsContainer.appendChild(opt);
-  });
-
-  if (isEdit) {
-    const memos = getActiveMemos();
-    const memo = memos[editingMemoIdx];
-    titleInput.value = memo.title || '';
-    if (currentMemoType === 'combo' && memo.comboParts) {
-      const loaded = memo.comboParts.map(p => {
-        if (typeof p === 'string') return { text: p, link: null };
-        return { text: p.text, link: p.link };
+        container.appendChild(card);
       });
-      comboParts = [...loaded, { text: '', link: null }];  // 末尾に空パーツ追加
-      renderComboChainBuilder();
-    } else {
-      contentInput.value = memo.content || '';
     }
-    (memo.tags || []).forEach(tag => {
-      const el = document.querySelector(`.tag-option[data-tag="${tag}"]`);
-      if (el) {
-        el.classList.add('selected');
-        el.querySelector('.tag-check').textContent = '●';
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ─── モーダル ───
+    function openMemoModal(idx) {
+      editingMemoIdx = (idx !== undefined) ? idx : -1;
+      const isEdit = editingMemoIdx >= 0;
+
+      document.getElementById('modal-title').textContent = isEdit ? '✏️ メモを編集' : '📝 メモを追加';
+
+      // モーダル内のプレースホルダーをタイプによって切り替え
+      const titleInput = document.getElementById('memo-input-title');
+      const contentInput = document.getElementById('memo-input-content');
+      const contentField = document.getElementById('modal-field-content');
+      const comboField = document.getElementById('modal-field-combo');
+
+      if (currentMemoType === 'combo') {
+        titleInput.placeholder = '例：画面端 弱K始動';
+        contentField.style.display = 'none';
+        comboField.style.display = 'block';
+        comboParts = [{ text: '', link: null }];  // 最初は空の1パーツ
+        renderComboChainBuilder();
+      } else if (currentMemoType === 'neutral') {
+        titleInput.placeholder = '例：中距離の牽制、対空意識…';
+        contentInput.placeholder = '立ち回りで意識することや連携、狙いを入力…';
+        contentField.style.display = 'block';
+        comboField.style.display = 'none';
+      } else {
+        titleInput.placeholder = '例：対空が強い、起き攻めに注意…';
+        contentInput.placeholder = '対策の詳細をメモしよう…';
+        contentField.style.display = 'block';
+        comboField.style.display = 'none';
       }
-    });
-  }
 
-  document.getElementById('modal-overlay').classList.add('active');
-}
+      // 入力値のリセット
+      titleInput.value = '';
+      contentInput.value = '';
 
-function closeMemoModal(event) {
-  const arrowPopup = document.getElementById('arrow-popup');
+      // タグオプションの生成
+      const tagOptionsContainer = document.getElementById('tag-options');
+      tagOptionsContainer.innerHTML = '';
 
-  if (event) {
-    // 背景（overlay）をタップした場合の処理
-    if (event.target === document.getElementById('modal-overlay')) {
-      if (arrowPopup && arrowPopup.classList.contains('active')) {
-        arrowPopup.classList.remove('active');
+      const tagsToDisplay = (currentMemoType === 'combo')
+        ? ['char-only', 'sa1', 'sa2', 'sa3', 'allin', 'pos']
+        : (currentMemoType === 'neutral')
+          ? ['neu-all', 'neu-sit', 'neu-growth', 'neu-test', 'neu-pend', 'important']
+          : ['important', 'low', 'hard', 'easy', 'stare'];
+
+      tagsToDisplay.forEach(tagId => {
+        const info = TAG_LABELS[tagId];
+        const opt = document.createElement('div');
+        opt.className = 'tag-option';
+        opt.dataset.tag = tagId;
+        opt.onclick = () => toggleTagOption(opt);
+        opt.innerHTML = `<span class="tag-check">○</span> ${info.label}`;
+        tagOptionsContainer.appendChild(opt);
+      });
+
+      if (isEdit) {
+        const memos = getActiveMemos();
+        const memo = memos[editingMemoIdx];
+        titleInput.value = memo.title || '';
+        if (currentMemoType === 'combo' && memo.comboParts) {
+          const loaded = memo.comboParts.map(p => {
+            if (typeof p === 'string') return { text: p, link: null };
+            return { text: p.text, link: p.link };
+          });
+          comboParts = [...loaded, { text: '', link: null }];  // 末尾に空パーツ追加
+          renderComboChainBuilder();
+        } else {
+          contentInput.value = memo.content || '';
+        }
+        (memo.tags || []).forEach(tag => {
+          const el = document.querySelector(`.tag-option[data-tag="${tag}"]`);
+          if (el) {
+            el.classList.add('selected');
+            el.querySelector('.tag-check').textContent = '●';
+          }
+        });
+      }
+
+      document.getElementById('modal-overlay').classList.add('active');
+    }
+
+    function closeMemoModal(event) {
+      const arrowPopup = document.getElementById('arrow-popup');
+
+      if (event) {
+        // 背景（overlay）をタップした場合の処理
+        if (event.target === document.getElementById('modal-overlay')) {
+          if (arrowPopup && arrowPopup.classList.contains('active')) {
+            arrowPopup.classList.remove('active');
+            document.removeEventListener('click', closeArrowMenuOnce);
+          }
+          // メインのメモ入力モーダルは閉じないようにする
+          return;
+        }
+        // モーダルの内側をタップした場合は何もしない
+        return;
+      }
+
+      // 引数なし（Xボタンやキャンセルボタン）の場合は、モーダルを閉じる
+      document.getElementById('modal-overlay').classList.remove('active');
+      if (arrowPopup) arrowPopup.classList.remove('active');
+      document.removeEventListener('click', closeArrowMenuOnce);
+    }
+
+    function toggleTagOption(el) {
+      el.classList.toggle('selected');
+      el.querySelector('.tag-check').textContent = el.classList.contains('selected') ? '●' : '○';
+    }
+
+    function saveMemoCard() {
+      const title = document.getElementById('memo-input-title').value.trim();
+      const tags = Array.from(document.querySelectorAll('.tag-option.selected')).map(el => el.dataset.tag);
+
+      let memoData;
+      if (currentMemoType === 'combo') {
+        const filledParts = comboParts.filter(p => p.text.trim() !== '');
+        if (!title && filledParts.length === 0) {
+          alert('タイトルかコンボパーツを入力してください');
+          return;
+        }
+        memoData = { title, tags, comboParts: filledParts, content: '' };
+      } else {
+        const content = document.getElementById('memo-input-content').value.trim();
+        if (!title && !content) {
+          alert('タイトルか内容を入力してください');
+          return;
+        }
+        memoData = { title, tags, content };
+      }
+
+      const memos = getActiveMemos();
+
+      if (editingMemoIdx >= 0) {
+        memos[editingMemoIdx] = memoData;
+      } else {
+        memos.push(memoData);
+      }
+
+      setActiveMemos(memos);
+      closeMemoModal();
+
+      if (currentMemoType === 'cm') {
+        updateFilteredCards();
+        renderCMSidebar();
+      } else {
+        updateFilteredCards();
+      }
+    }
+
+    function editMemoCard(idx) {
+      openMemoModal(idx);
+    }
+
+    function deleteMemoCard(idx) {
+      if (!confirm('このメモを削除しますか？')) return;
+      const memos = getActiveMemos();
+      memos.splice(idx, 1);
+      setActiveMemos(memos);
+
+      if (currentMemoType === 'cm') {
+        updateFilteredCards();
+        renderCMSidebar();
+      } else {
+        updateFilteredCards();
+      }
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  コンボチェーンビルダー
+    // ═══════════════════════════════════════════════════
+    let comboParts = [{ text: '', link: null }];
+    let editingArrowIdx = -1;
+
+    function openArrowMenu(idx, event) {
+      editingArrowIdx = idx;
+      const popup = document.getElementById('arrow-popup');
+      popup.style.left = event.clientX + 'px';
+      popup.style.top = event.clientY + 'px';
+      popup.classList.add('active');
+      setTimeout(() => document.addEventListener('click', closeArrowMenuOnce), 10);
+    }
+
+    function closeArrowMenuOnce(e) {
+      const popup = document.getElementById('arrow-popup');
+      if (!popup.contains(e.target)) {
+        popup.classList.remove('active');
         document.removeEventListener('click', closeArrowMenuOnce);
       }
-      // メインのメモ入力モーダルは閉じないようにする
-      return;
     }
-    // モーダルの内側をタップした場合は何もしない
-    return;
-  }
 
-  // 引数なし（Xボタンやキャンセルボタン）の場合は、モーダルを閉じる
-  document.getElementById('modal-overlay').classList.remove('active');
-  if (arrowPopup) arrowPopup.classList.remove('active');
-  document.removeEventListener('click', closeArrowMenuOnce);
-}
+    function setArrowLink(type) {
+      const popup = document.getElementById('arrow-popup');
+      popup.classList.remove('active');
+      document.removeEventListener('click', closeArrowMenuOnce);
+      if (editingArrowIdx < 0) return;
 
-function toggleTagOption(el) {
-  el.classList.toggle('selected');
-  el.querySelector('.tag-check').textContent = el.classList.contains('selected') ? '●' : '○';
-}
-
-function saveMemoCard() {
-  const title   = document.getElementById('memo-input-title').value.trim();
-  const tags    = Array.from(document.querySelectorAll('.tag-option.selected')).map(el => el.dataset.tag);
-  
-  let memoData;
-  if (currentMemoType === 'combo') {
-    const filledParts = comboParts.filter(p => p.text.trim() !== '');
-    if (!title && filledParts.length === 0) {
-      alert('タイトルかコンボパーツを入力してください');
-      return;
-    }
-    memoData = { title, tags, comboParts: filledParts, content: '' };
-  } else {
-    const content = document.getElementById('memo-input-content').value.trim();
-    if (!title && !content) {
-      alert('タイトルか内容を入力してください');
-      return;
-    }
-    memoData = { title, tags, content };
-  }
-
-  const memos = getActiveMemos();
-
-  if (editingMemoIdx >= 0) {
-    memos[editingMemoIdx] = memoData;
-  } else {
-    memos.push(memoData);
-  }
-
-  setActiveMemos(memos);
-  closeMemoModal();
-  
-  if (currentMemoType === 'cm') {
-    updateFilteredCards();
-    renderCMSidebar();
-  } else {
-    updateFilteredCards();
-  }
-}
-
-function editMemoCard(idx) {
-  openMemoModal(idx);
-}
-
-function deleteMemoCard(idx) {
-  if (!confirm('このメモを削除しますか？')) return;
-  const memos = getActiveMemos();
-  memos.splice(idx, 1);
-  setActiveMemos(memos);
-  
-  if (currentMemoType === 'cm') {
-    updateFilteredCards();
-    renderCMSidebar();
-  } else {
-    updateFilteredCards();
-  }
-}
-
-// ═══════════════════════════════════════════════════
-//  コンボチェーンビルダー
-// ═══════════════════════════════════════════════════
-let comboParts = [{ text: '', link: null }];
-let editingArrowIdx = -1;
-
-function openArrowMenu(idx, event) {
-  editingArrowIdx = idx;
-  const popup = document.getElementById('arrow-popup');
-  popup.style.left = event.clientX + 'px';
-  popup.style.top = event.clientY + 'px';
-  popup.classList.add('active');
-  setTimeout(() => document.addEventListener('click', closeArrowMenuOnce), 10);
-}
-
-function closeArrowMenuOnce(e) {
-  const popup = document.getElementById('arrow-popup');
-  if (!popup.contains(e.target)) {
-    popup.classList.remove('active');
-    document.removeEventListener('click', closeArrowMenuOnce);
-  }
-}
-
-function setArrowLink(type) {
-  const popup = document.getElementById('arrow-popup');
-  popup.classList.remove('active');
-  document.removeEventListener('click', closeArrowMenuOnce);
-  if (editingArrowIdx < 0) return;
-  
-  let linkObj = null;
-  if (type === 'rush') linkObj = { type: 'rush', label: 'キャンセルラッシュ' };
-  else if (type === 'walk') linkObj = { type: 'walk', label: '微歩き' };
-  else if (type === 'frame') {
-    const f = prompt('フレーム数を半角数字で入力してください (例: 4)');
-    if (f === null || f.trim() === '') return;
-    linkObj = { type: 'frame', label: `${f.trim()}F` };
-  }
-  comboParts[editingArrowIdx].link = linkObj;
-  renderComboChainBuilder();
-}
-
-function renderComboChainBuilder() {
-  const container = document.getElementById('combo-chain-builder');
-  container.innerHTML = '';
-
-  comboParts.forEach((part, idx) => {
-    // 矢印（最初のパーツ以外に表示）
-    if (idx > 0) {
-      const prevPart = comboParts[idx - 1];
-      const arrowWrap = document.createElement('div');
-      arrowWrap.className = 'combo-arrow-wrapper';
-      arrowWrap.onclick = (e) => { e.stopPropagation(); openArrowMenu(idx - 1, e); };
-      
-      const arrowLabel = document.createElement('div');
-      if (prevPart.link) {
-        arrowLabel.className = 'combo-arrow-label ' + (prevPart.link.type === 'rush' ? 'label-rush' : (prevPart.link.type === 'frame' ? 'label-frame' : 'label-walk'));
-        arrowLabel.textContent = prevPart.link.label;
-      } else {
-        arrowLabel.className = 'combo-arrow-label';
-        arrowLabel.textContent = '';
+      let linkObj = null;
+      if (type === 'rush') linkObj = { type: 'rush', label: 'キャンセルラッシュ' };
+      else if (type === 'walk') linkObj = { type: 'walk', label: '微歩き' };
+      else if (type === 'frame') {
+        const f = prompt('フレーム数を半角数字で入力してください (例: 4)');
+        if (f === null || f.trim() === '') return;
+        linkObj = { type: 'frame', label: `${f.trim()}F` };
       }
-      
-      const arrowIcon = document.createElement('div');
-      arrowIcon.className = 'combo-arrow';
-      arrowIcon.textContent = '→';
-      
-      arrowWrap.appendChild(arrowLabel);
-      arrowWrap.appendChild(arrowIcon);
-      container.appendChild(arrowWrap);
+      comboParts[editingArrowIdx].link = linkObj;
+      renderComboChainBuilder();
     }
 
-    // パーツ長方形
-    const box = document.createElement('div');
-    const hasText = part.text.trim() !== '';
-    box.className = 'combo-part' + (hasText ? ' filled' : ' empty');
-    box.dataset.idx = idx;
+    function renderComboChainBuilder() {
+      const container = document.getElementById('combo-chain-builder');
+      container.innerHTML = '';
 
-    if (hasText) {
-      // 入力済み：テキスト表示 + 削除ボタン
-      box.textContent = part.text;
-      
-      // 削除ボタン（パーツが2つ以上の場合のみ）
-      if (comboParts.filter(p => p.text.trim() !== '').length > 1 || comboParts.length > 1) {
-        const del = document.createElement('button');
-        del.className = 'combo-part-delete';
-        del.textContent = '✕';
-        del.onclick = (e) => { e.stopPropagation(); deleteComboPart(idx); };
-        box.appendChild(del);
+      comboParts.forEach((part, idx) => {
+        // 矢印（最初のパーツ以外に表示）
+        if (idx > 0) {
+          const prevPart = comboParts[idx - 1];
+          const arrowWrap = document.createElement('div');
+          arrowWrap.className = 'combo-arrow-wrapper';
+          arrowWrap.onclick = (e) => { e.stopPropagation(); openArrowMenu(idx - 1, e); };
+
+          const arrowLabel = document.createElement('div');
+          if (prevPart.link) {
+            arrowLabel.className = 'combo-arrow-label ' + (prevPart.link.type === 'rush' ? 'label-rush' : (prevPart.link.type === 'frame' ? 'label-frame' : 'label-walk'));
+            arrowLabel.textContent = prevPart.link.label;
+          } else {
+            arrowLabel.className = 'combo-arrow-label';
+            arrowLabel.textContent = '';
+          }
+
+          const arrowIcon = document.createElement('div');
+          arrowIcon.className = 'combo-arrow';
+          arrowIcon.textContent = '→';
+
+          arrowWrap.appendChild(arrowLabel);
+          arrowWrap.appendChild(arrowIcon);
+          container.appendChild(arrowWrap);
+        }
+
+        // パーツ長方形
+        const box = document.createElement('div');
+        const hasText = part.text.trim() !== '';
+        box.className = 'combo-part' + (hasText ? ' filled' : ' empty');
+        box.dataset.idx = idx;
+
+        if (hasText) {
+          // 入力済み：テキスト表示 + 削除ボタン
+          box.textContent = part.text;
+
+          // 削除ボタン（パーツが2つ以上の場合のみ）
+          if (comboParts.filter(p => p.text.trim() !== '').length > 1 || comboParts.length > 1) {
+            const del = document.createElement('button');
+            del.className = 'combo-part-delete';
+            del.textContent = '✕';
+            del.onclick = (e) => { e.stopPropagation(); deleteComboPart(idx); };
+            box.appendChild(del);
+          }
+
+          // クリックで再編集
+          box.onclick = () => editComboPart(idx);
+        } else {
+          // 空パーツ：クリックで入力開始
+          box.textContent = 'タップ';
+          box.onclick = () => editComboPart(idx);
+        }
+
+        container.appendChild(box);
+      });
+    }
+
+    function editComboPart(idx) {
+      const container = document.getElementById('combo-chain-builder');
+      // 既存の全パーツを再描画（他の編集中を閉じる）
+      renderComboChainBuilder();
+
+      // 対象パーツを入力モードに切り替え
+      const boxes = container.querySelectorAll('.combo-part');
+      const box = boxes[idx];
+      if (!box) return;
+
+      box.className = 'combo-part active';
+      box.textContent = '';
+      box.onclick = null;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'combo-part-input';
+      input.value = comboParts[idx].text || '';
+      input.placeholder = '入力…';
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          finishComboPart(idx, input.value);
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        finishComboPart(idx, input.value);
+      });
+
+      box.appendChild(input);
+      input.focus();
+    }
+
+    function finishComboPart(idx, value) {
+      const trimmed = value.trim();
+      comboParts[idx].text = trimmed;
+
+      if (trimmed !== '') {
+        // 最後のパーツに入力されたら、後ろに空パーツを追加
+        const lastFilledIdx = comboParts.length - 1;
+        if (idx === lastFilledIdx || (idx === comboParts.length - 1)) {
+          // 末尾に空パーツがなければ追加
+          if (comboParts[comboParts.length - 1].text !== '') {
+            comboParts.push({ text: '', link: null });
+          }
+        }
       }
 
-      // クリックで再編集
-      box.onclick = () => editComboPart(idx);
-    } else {
-      // 空パーツ：クリックで入力開始
-      box.textContent = 'タップ';
-      box.onclick = () => editComboPart(idx);
+      // 空パーツが連続しないよう整理（末尾の空1つだけ残す）
+      while (comboParts.length > 1 && comboParts[comboParts.length - 1].text === '' && comboParts[comboParts.length - 2].text === '') {
+        comboParts.pop();
+      }
+
+      renderComboChainBuilder();
     }
 
-    container.appendChild(box);
-  });
-}
-
-function editComboPart(idx) {
-  const container = document.getElementById('combo-chain-builder');
-  // 既存の全パーツを再描画（他の編集中を閉じる）
-  renderComboChainBuilder();
-  
-  // 対象パーツを入力モードに切り替え
-  const boxes = container.querySelectorAll('.combo-part');
-  const box = boxes[idx];
-  if (!box) return;
-
-  box.className = 'combo-part active';
-  box.textContent = '';
-  box.onclick = null;
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'combo-part-input';
-  input.value = comboParts[idx].text || '';
-  input.placeholder = '入力…';
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      finishComboPart(idx, input.value);
-    }
-  });
-
-  input.addEventListener('blur', () => {
-    finishComboPart(idx, input.value);
-  });
-
-  box.appendChild(input);
-  input.focus();
-}
-
-function finishComboPart(idx, value) {
-  const trimmed = value.trim();
-  comboParts[idx].text = trimmed;
-
-  if (trimmed !== '') {
-    // 最後のパーツに入力されたら、後ろに空パーツを追加
-    const lastFilledIdx = comboParts.length - 1;
-    if (idx === lastFilledIdx || (idx === comboParts.length - 1)) {
+    function deleteComboPart(idx) {
+      comboParts.splice(idx, 1);
+      if (comboParts.length === 0) comboParts = [{ text: '', link: null }];
       // 末尾に空パーツがなければ追加
-      if (comboParts[comboParts.length - 1].text !== '') {
-        comboParts.push({ text: '', link: null });
-      }
+      if (comboParts[comboParts.length - 1].text !== '') comboParts.push({ text: '', link: null });
+      renderComboChainBuilder();
     }
-  }
 
-  // 空パーツが連続しないよう整理（末尾の空1つだけ残す）
-  while (comboParts.length > 1 && comboParts[comboParts.length - 1].text === '' && comboParts[comboParts.length - 2].text === '') {
-    comboParts.pop();
-  }
-
-  renderComboChainBuilder();
-}
-
-function deleteComboPart(idx) {
-  comboParts.splice(idx, 1);
-  if (comboParts.length === 0) comboParts = [{ text: '', link: null }];
-  // 末尾に空パーツがなければ追加
-  if (comboParts[comboParts.length - 1].text !== '') comboParts.push({ text: '', link: null });
-  renderComboChainBuilder();
-}
-
-// ─── 初期化 ───
-renderCharGrid(CHARACTERS);
-</script>
+    // ─── 初期化 ───
+    renderCharGrid(CHARACTERS);
+  </script>
 </body>
+
 </html>
