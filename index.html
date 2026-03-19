@@ -125,7 +125,7 @@
       z-index: 10;
     }
     
-    .theme-toggle, .icon-btn {
+    .theme-toggle, .icon-btn, .help-btn {
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -140,10 +140,28 @@
       transition: all var(--transition);
       color: var(--text);
     }
-    .theme-toggle:hover, .icon-btn:hover {
+    .theme-toggle:hover, .icon-btn:hover, .help-btn:hover {
       border-color: var(--accent);
       transform: scale(1.1);
     }
+
+    .help-btn {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      font-weight: 700;
+    }
+
+    .about-content {
+      line-height: 1.8;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .about-content p { margin-bottom: 16px; }
+    .about-link { color: var(--accent); text-decoration: none; font-weight: 700; }
+    .about-link:hover { text-decoration: underline; }
 
     .list-subtitle {
       text-align: center;
@@ -1034,6 +1052,7 @@
 <!-- ════════════════════════════ キャラ一覧画面 ════════════════════════════ -->
 <div id="screen-list" class="screen active">
   <div class="header">
+    <button class="help-btn" onclick="openAboutModal()" title="アプリについて">？</button>
     <img src="assets/logo.png" alt="Fight Note" class="header-logo">
     <div class="header-actions">
       <button class="icon-btn" onclick="exportData()" title="データを書き出し（バックアップ）">📤</button>
@@ -1200,6 +1219,24 @@
   <div class="arrow-popup-item" onclick="setArrowLink(null)" style="color: #ff4444;">❌ 通常の矢印に戻す</div>
 </div>
 
+<!-- ─── ヘルプモーダル ─── -->
+<div class="modal-overlay" id="about-overlay" onclick="closeAboutModal(event)">
+  <div class="modal" id="about-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">📖 アプリについて</h2>
+      <button class="close-btn" onclick="closeAboutModal()">×</button>
+    </div>
+    <div class="modal-body about-content">
+      <p>このアプリは現在Beta版です。バグや不具合、改善の要望などがあればぜひ開発者のX (Twitter) <a href="https://x.com/letmeshee" target="_blank" class="about-link">@letmeshee</a> のDMまでお願いします。</p>
+      <p><strong>📱 スマホアプリとして使う場合</strong><br>ブラウザの「共有」メニューから「ホーム画面に追加」を選ぶことで、スマホアプリと同じように起動して使えるようになります。</p>
+      <p><strong>☁️ データの共有とバックアップ</strong><br>画面右上のアイコンから、攻略内容をファイル（JSON）として書き出し（📤）たり、取り込み（📥）たりできます。友達とデータを共有したり、自分用のバックアップとして活用いただけます。</p>
+    </div>
+    <div class="modal-footer">
+      <button class="save-btn" style="width:100%; justify-content:center;" onclick="closeAboutModal()">とじる</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── サービスワーカー登録 ───
 if ('serviceWorker' in navigator) {
@@ -1208,6 +1245,15 @@ if ('serviceWorker' in navigator) {
       .then(reg => console.log('SW registered:', reg.scope))
       .catch(err => console.log('SW registration failed:', err));
   });
+}
+
+// ─── ヘルプモーダル ───
+function openAboutModal() {
+  document.getElementById('about-overlay').classList.add('active');
+}
+function closeAboutModal(event) {
+  if (event && event.target !== document.getElementById('about-overlay')) return;
+  document.getElementById('about-overlay').classList.remove('active');
 }
 
 // ─── テーマ切り替え ───
