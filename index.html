@@ -321,13 +321,15 @@
     .char-portrait {
       width: 100%;
       aspect-ratio: 1;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 42px;
+      font-size: calc(var(--char-size) * 0.5);
       background: linear-gradient(135deg, #1a1a2e 0%, #2a1030 100%);
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .char-portrait::after {
@@ -343,6 +345,13 @@
       font-weight: 700;
       letter-spacing: 0.5px;
       color: var(--text);
+      word-break: break-word;
+      line-height: 1.3;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
 
     .has-memo::after {
