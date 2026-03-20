@@ -63,7 +63,7 @@
     /* ─── スクリーン管理 ─── */
     .screen {
       display: none;
-      height: 100vh;
+      height: 100%;
       flex-direction: column;
       overflow: hidden;
     }
@@ -274,13 +274,26 @@
 
     .char-grid {
       flex: 1;
+      min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(max(80px, var(--char-size)), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(max(85px, var(--char-size)), 1fr));
       gap: 12px;
       padding: 14px 14px 80px;
       align-content: start;
+    }
+
+    @media (max-width: 340px) {
+      .char-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 220px) {
+      .char-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .char-grid::-webkit-scrollbar {
@@ -1526,7 +1539,7 @@
     <div class="header">
       <div class="header-left">
         <button class="help-btn" onclick="openAboutModal()" title="アプリについて">？</button>
-        <span class="logo-text">ストメモ</span>
+        <span class="logo-text">ストメモ<span style="color:var(--accent); margin-left:2px; opacity:0.6;">·</span></span>
       </div>
       <img src="assets/logo.png" alt="Fight Note" class="header-logo">
       <div class="header-actions">
