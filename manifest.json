@@ -2,20 +2,21 @@
   "name": "ストメモ スト６専用メモアプリ",
   "short_name": "ストメモ",
   "description": "SF6のキャラ対策・コンボ・立ち回りなどを自由にメモできるアプリです。",
-  "start_url": "https://letmeshee.github.io/sf6-fight-note/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#e8001e",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/icon192.png",
+      "src": "./assets/icon192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/icon512.png",
+      "src": "./assets/icon512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -23,28 +24,28 @@
   ],
   "screenshots": [
     {
-      "src": "assets/screenshot1.png",
+      "src": "./assets/screenshot1.png",
       "sizes": "720x1280",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "メイン画面（キャラ一覧）"
     },
     {
-      "src": "assets/screenshot2.png",
+      "src": "./assets/screenshot2.png",
       "sizes": "720x1280",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "キャラ対策メモ画面"
     },
     {
-      "src": "assets/screenshot3.png",
+      "src": "./assets/screenshot3.png",
       "sizes": "720x1280",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "コンボ表画面"
     },
     {
-      "src": "assets/screenshot4.png",
+      "src": "./assets/screenshot4.png",
       "sizes": "720x1280",
       "type": "image/png",
       "form_factor": "narrow",
