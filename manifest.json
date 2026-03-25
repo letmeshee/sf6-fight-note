@@ -1,10 +1,10 @@
 {
-  "name": "SF6 Fight Note",
-  "short_name": "Fight Note",
-  "description": "SF6のキャラ対策・コンボ・立ち回りをメモするアプリ",
-  "start_url": "./index.html",
+  "name": "ストメモ スト６専用メモアプリ",
+  "short_name": "ストメモ",
+  "description": "SF6のキャラ対策・コンボ・立ち回りなどを自由にメモできるアプリです。",
+  "start_url": "https://letmeshee.github.io/sf6-fight-note/",
   "display": "standalone",
-  "background_color": "#0d0d14",
+  "background_color": "#ffffff",
   "theme_color": "#e8001e",
   "orientation": "portrait",
   "icons": [
@@ -50,5 +50,20 @@
       "form_factor": "narrow",
       "label": "立ち回りメモ画面"
     }
+  ],
+  "categories": [
+    "entertainment",
+    "games",
+    "productivity"
+  ],
+  "lang": "ja",
+  "dir": "auto",
+  "id": "SF6Memo",
+  "display_override": [
+    "standalone",
+    "browser",
+    "fullscreen",
+    "minimal-ui",
+    "window-controls-overlay"
   ]
 }
