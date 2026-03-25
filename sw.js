@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sf6-fight-note-v3';
+const CACHE_NAME = 'sf6-fight-note-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,8 +9,7 @@ const ASSETS_TO_CACHE = [
   './assets/screenshot2.png',
   './assets/screenshot3.png',
   './assets/screenshot4.png',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap'
+  './manifest.json'
 ];
 
 // インストール時にキャッシュ
