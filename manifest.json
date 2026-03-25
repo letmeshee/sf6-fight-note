@@ -20,5 +20,35 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "メイン画面（キャラ一覧）"
+    },
+    {
+      "src": "assets/screenshot2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "キャラ対策メモ画面"
+    },
+    {
+      "src": "assets/screenshot3.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "コンボ表画面"
+    },
+    {
+      "src": "assets/screenshot4.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "立ち回りメモ画面"
+    }
   ]
 }
