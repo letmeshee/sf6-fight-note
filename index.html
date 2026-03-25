@@ -129,16 +129,6 @@
       z-index: 10;
     }
 
-    .logo-text {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: 19px;
-      color: var(--accent);
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 10px rgba(232, 0, 30, 0.2);
-      white-space: nowrap;
-    }
-
     .theme-toggle,
     .icon-btn,
     .help-btn {
@@ -254,6 +244,7 @@
     .char-size-slider {
       flex: 1;
       -webkit-appearance: none;
+      appearance: none;
       height: 6px;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -1578,7 +1569,6 @@
     <div class="header">
       <div class="header-left">
         <button class="help-btn" onclick="openAboutModal()" title="アプリについて">？</button>
-        <span class="logo-text">ストメモ</span>
       </div>
       <img src="assets/logo.png" alt="Fight Note" class="header-logo">
       <div class="header-actions">
