@@ -1,9 +1,10 @@
-const CACHE_NAME = 'sf6-fight-note-v1';
+const CACHE_NAME = 'sf6-fight-note-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './assets/logo.png',
-  './assets/icon.png',
+  './assets/icon192.png',
+  './assets/icon512.png',
   './manifest.json',
   'https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap'
 ];
